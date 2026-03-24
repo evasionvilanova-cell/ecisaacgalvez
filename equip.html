@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Equip Cadet 2025–2026 · Ecisaacgalvez</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://evasionvilanova-cell.github.io">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Raleway:wght@300;400;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -20,7 +23,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
       background: var(--white);
       color: var(--dark);
       overflow-x: hidden;
@@ -35,7 +38,7 @@
       box-shadow: 0 2px 30px rgba(252,68,157,0.2);
     }
     .nav-logo {
-      font-family: 'Raleway', sans-serif;
+      font-family: 'Raleway', 'Georgia', serif;
       font-weight: 900; font-size: 1.1rem;
       color: white; text-decoration: none;
       letter-spacing: 0.05em;
@@ -93,7 +96,7 @@
     }
 
     .hero-equip h1 {
-      font-family: 'Raleway', sans-serif;
+      font-family: 'Raleway', 'Georgia', serif;
       font-size: clamp(2.5rem, 6vw, 5rem);
       font-weight: 900; color: white; line-height: 1;
       animation: fadeUp 0.7s 0.1s ease both;
@@ -139,7 +142,7 @@
       display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
     }
     .stat { text-align: center; }
-    .stat-num { font-family: 'Raleway', sans-serif; font-size: 2.2rem; font-weight: 900; color: white; line-height: 1; }
+    .stat-num { font-family: 'Raleway', 'Georgia', serif; font-size: 2.2rem; font-weight: 900; color: white; line-height: 1; }
     .stat-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-top: 4px; }
 
     /* ── RIDERS ── */
@@ -154,7 +157,7 @@
       color: var(--pink); margin-bottom: 0.6rem;
     }
     h2 {
-      font-family: 'Raleway', sans-serif;
+      font-family: 'Raleway', 'Georgia', serif;
       font-size: clamp(2rem, 4.5vw, 3rem);
       font-weight: 900; line-height: 1.05;
     }
@@ -200,7 +203,7 @@
       color: var(--pink); margin-bottom: 3px;
     }
     .rider-name {
-      font-family: 'Raleway', sans-serif;
+      font-family: 'Raleway', 'Georgia', serif;
       font-size: 1rem; font-weight: 900;
       color: var(--dark); line-height: 1.2;
     }
@@ -256,7 +259,7 @@
     }
     .back-bar p { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
     .btn-back {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
       font-weight: 700; font-size: 0.82rem;
       letter-spacing: 0.1em; text-transform: uppercase;
       padding: 0.7rem 1.8rem; border: none; cursor: pointer;
@@ -304,6 +307,12 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
     }
+  
+    /* PERFORMANCE */
+    img { content-visibility: auto; }
+    .rider-img-wrap { background: linear-gradient(135deg, rgba(252,68,157,0.08), rgba(196,32,122,0.08)); }
+    .rider-card { will-change: transform; }
+
   </style>
 </head>
 <body>
@@ -334,7 +343,7 @@
   <!-- FOTO GRUP -->
   <div class="foto-grup">
     <div class="foto-grup-inner reveal">
-      <img
+      <img loading="lazy" decoding="async"
         src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%28134%29.jpg"
         alt="Equip Cadet Ecisaacgalvez 2025-2026"
       />
@@ -362,7 +371,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2819%29.jpg" alt="Corredor 1" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2819%29.jpg" alt="Corredor 1" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #1</div>
@@ -373,7 +382,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2823%29.jpg" alt="Corredor 2" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2823%29.jpg" alt="Corredor 2" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #2</div>
@@ -384,7 +393,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2828%29.jpg" alt="Corredor 3" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2828%29.jpg" alt="Corredor 3" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #3</div>
@@ -395,7 +404,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2828%29.jpg" alt="Corredor 4" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2828%29.jpg" alt="Corredor 4" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #4</div>
@@ -406,7 +415,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2831%29.jpg" alt="Corredor 5" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2831%29.jpg" alt="Corredor 5" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #5</div>
@@ -417,7 +426,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%283%29.jpg" alt="Corredor 6" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%283%29.jpg" alt="Corredor 6" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #6</div>
@@ -428,7 +437,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%285%29.jpg" alt="Corredor 7" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%285%29.jpg" alt="Corredor 7" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #7</div>
@@ -439,7 +448,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%289%29.jpg" alt="Corredor 8" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%289%29.jpg" alt="Corredor 8" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #8</div>
@@ -450,7 +459,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2812%29.jpg" alt="Corredor 9" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2812%29.jpg" alt="Corredor 9" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #9</div>
@@ -461,7 +470,7 @@
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
-          <img src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2816%29.jpg" alt="Corredor 10" />
+          <img loading="lazy" decoding="async" src="https://evasionvilanova-cell.github.io/ecisaacgalvez/images/ABEL%20PHOTO%20FLIM%20ecisaacgalvez%2026%20%20%2816%29.jpg" alt="Corredor 10" />
         </div>
         <div class="rider-body">
           <div class="rider-num">Cadet · #10</div>
