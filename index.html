@@ -655,7 +655,7 @@
 
   <script>
     (function(){
-      var api = localStorage.getItem('ecig_api');
+      var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
       if(!api) return;
       fetch(api+'?action=getAll&table=patrocinadors')
         .then(function(r){return r.json();})
