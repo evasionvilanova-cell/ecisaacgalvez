@@ -174,7 +174,7 @@ function renderCat(cat,data){
 }
 
 function loadCat(cat){
-  var api=localStorage.getItem('ecig_api');
+  var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
   if(!api){document.getElementById('rg-'+cat).innerHTML='<div class="empty"><div class="empty-i">&#x1F517;</div><p style="font-size:.82rem">Connecta el dashboard per veure els corredors</p></div>';return;}
   fetch(api+'?action=getAll&table=corredors')
     .then(function(r){return r.json();})
@@ -188,7 +188,7 @@ function loadCat(cat){
 
 // Carregar config i riders
 window.onload=function(){
-  var api=localStorage.getItem('ecig_api');
+  var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
   if(api){
     fetch(api+'?action=getConfig').then(function(r){return r.json();}).then(function(c){
       if(c.escola_title)document.getElementById('escola-title-h').textContent=c.escola_title;
