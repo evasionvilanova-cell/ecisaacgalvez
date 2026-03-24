@@ -178,7 +178,7 @@ function updateStats(data){
 }
 
 window.onload=function(){
-  var api=localStorage.getItem('ecig_api');
+  var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
   if(!api){
     document.getElementById('comp-list').innerHTML='<div class="empty"><div style="font-size:2.5rem;margin-bottom:.75rem">&#x1F517;</div><p style="font-size:.85rem">Connecta el dashboard admin per veure les competicions</p></div>';
     return;
