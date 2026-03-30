@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Competicions · Ecisaacgalvez</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:#fff;color:#1a0a12;overflow-x:hidden}
+:root{--pk:#fc449d;--pkl:#ff7ec3;--pkd:#c4207a;--off:#fff5fb;--gr:#6b3a55;--dk:#1a0a12;--dk3:#3a0a25}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2.5rem;background:linear-gradient(135deg,var(--dk),var(--dk3));box-shadow:0 2px 30px rgba(252,68,157,.2)}
+.nl{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.1rem;color:#fff;text-decoration:none}
+.nl em{color:var(--pkl);font-style:normal}
+.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,.8);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--pkl)}
+.btn-nav{background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff!important;padding:.45rem 1.2rem!important;border-radius:50px;box-shadow:0 4px 15px rgba(252,68,157,.4)}
+.hero-comp{min-height:55vh;background:linear-gradient(135deg,var(--dk) 0%,var(--dk3) 60%,#5a1040 100%);display:flex;align-items:flex-end;padding:120px 2.5rem 4rem;position:relative;overflow:hidden}
+.hero-comp::before{content:'';position:absolute;top:-40%;right:-10%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(252,68,157,.2) 0%,transparent 65%);border-radius:50%}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.htag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(252,68,157,.15);border:1px solid rgba(252,68,157,.4);color:var(--pkl);font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:.32rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+h1{font-family:'Raleway',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;color:#fff;line-height:1}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--pk),var(--pkl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.hero-sub{margin-top:1.2rem;font-size:1rem;font-weight:300;color:rgba(255,255,255,.65);line-height:1.7;max-width:500px}
+section{padding:5rem 2.5rem}
+.stag{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--pk);margin-bottom:.6rem}
+h2{font-family:'Raleway',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;line-height:1.05}
+/* FILTERS */
+.filters{display:flex;gap:.75rem;flex-wrap:wrap;margin:2rem 0 1.5rem}
+.filter-btn{border:1.5px solid rgba(252,68,157,.2);background:#fff;color:var(--gr);border-radius:50px;padding:.4rem 1rem;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.filter-btn:hover,.filter-btn.on{background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;border-color:var(--pk);box-shadow:0 4px 12px rgba(252,68,157,.25)}
+/* CALENDAR LIST */
+.comp-list{display:flex;flex-direction:column;gap:1rem}
+.comp-item{display:flex;align-items:stretch;border-radius:16px;overflow:hidden;border:1px solid rgba(252,68,157,.1);box-shadow:0 2px 12px rgba(0,0,0,.04);transition:all .3s;background:#fff}
+.comp-item:hover{box-shadow:0 8px 30px rgba(252,68,157,.15);border-color:rgba(252,68,157,.3);transform:translateX(4px)}
+.comp-date-block{min-width:80px;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.75rem;text-align:center;flex-shrink:0}
+.comp-day{font-family:'Raleway',sans-serif;font-size:2rem;font-weight:900;line-height:1}
+.comp-month{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.85;margin-top:1px}
+.comp-body{flex:1;padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1.5rem}
+.comp-info{flex:1;min-width:0}
+.comp-name{font-family:'Raleway',sans-serif;font-size:1.15rem;font-weight:900;line-height:1.2}
+.comp-meta{display:flex;align-items:center;gap:.75rem;margin-top:.4rem;flex-wrap:wrap}
+.comp-place{font-size:.78rem;color:var(--gr);display:flex;align-items:center;gap:.3rem}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.bpk{background:rgba(252,68,157,.1);color:var(--pkd)}
+.bgn{background:rgba(34,197,94,.1);color:#15803d}
+.bgr{background:rgba(0,0,0,.06);color:var(--gr)}
+.brd{background:rgba(239,68,68,.1);color:#dc2626}
+.comp-actions{flex-shrink:0}
+.btn-fed{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;text-decoration:none;border-radius:8px;padding:.5rem 1rem;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 12px rgba(252,68,157,.25);transition:all .2s}
+.btn-fed:hover{box-shadow:0 6px 18px rgba(252,68,157,.45);transform:translateY(-1px)}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:3rem}
+.st{background:var(--off);border-radius:14px;padding:1.2rem;text-align:center;border:1px solid rgba(252,68,157,.1)}
+.st-n{font-family:'Raleway',sans-serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--pk),var(--pkd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.st-l{font-size:.67rem;color:var(--gr);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.ld{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--gr);font-size:.82rem;gap:.5rem}
+.spin{width:16px;height:16px;border:2px solid rgba(252,68,157,.2);border-top-color:var(--pk);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gr)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90deg,var(--pk),var(--pkl),var(--pk)) 1;padding:2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.2)}
+@media(max-width:900px){.stats-row{grid-template-columns:1fr 1fr}.comp-body{flex-direction:column;align-items:flex-start;gap:.75rem}.nav-links{display:none}nav{padding:.9rem 1.2rem}section{padding:3.5rem 1.2rem}}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr}.comp-item{flex-direction:column}.comp-date-block{flex-direction:row;gap:.5rem;min-width:unset;padding:.6rem 1rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nl">Eci<em>Isaac</em>Galvez</a>
+  <ul class="nav-links">
+    <li><a href="escola.html">Escola</a></li>
+    <li><a href="competicions.html" class="active">Competicions</a></li>
+    <li><a href="carreres.html">Carreres</a></li>
+    <li><a href="equip.html">Equip Cadet</a></li>
+    <li><a href="index.html#inscripcio" class="btn-nav">Inscriu-te</a></li>
+    <li><a href="admin.html" style="color:rgba(255,255,255,0.3);font-size:0.7rem">&#x2699;&#xFE0F;</a></li>
+  </ul>
+</nav>
+
+<div class="hero-comp">
+  <div class="hero-content">
+    <div class="htag">&#x1F3C6; Calendari oficial</div>
+    <h1>Calendari de<em>Competicions</em></h1>
+    <p class="hero-sub">Totes les curses del calendari Catala i fora de Catalunya. Fes clic a l'enllas de la Federacio per fer la inscripcio.</p>
+  </div>
+</div>
+
+<section id="calendari" style="background:var(--off)">
+  <div class="reveal">
+    <div class="stag">Temporada 2025-2026</div>
+    <h2>Totes les competicions</h2>
+  </div>
+  <div class="stats-row" id="stats-row">
+    <div class="st"><div class="st-n" id="st-total">0</div><div class="st-l">Total curses</div></div>
+    <div class="st"><div class="st-n" id="st-open">0</div><div class="st-l">Inscripcio oberta</div></div>
+    <div class="st"><div class="st-n" id="st-pend">0</div><div class="st-l">Pendents</div></div>
+    <div class="st"><div class="st-n" id="st-done">0</div><div class="st-l">Completades</div></div>
+  </div>
+  <div class="filters">
+    <button class="filter-btn on" onclick="filterComps('all',this)">Totes</button>
+    <button class="filter-btn" onclick="filterComps('Cadet',this)">Cadet</button>
+    <button class="filter-btn" onclick="filterComps('Infantil',this)">Infantil</button>
+    <button class="filter-btn" onclick="filterComps('Base',this)">Base</button>
+    <button class="filter-btn" onclick="filterComps('Inscripcio oberta',this)">Inscripcio oberta</button>
+  </div>
+  <div class="comp-list" id="comp-list">
+    <div class="ld"><div class="spin"></div> Carregant competicions...</div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-copy">&copy; 2025 Escola de Ciclisme Ecisaacgalvez &middot; Vilanova i la Geltru</p>
+</footer>
+
+<script>
+var allComps = [];
+
+function fd(d){
+  if(!d||d===''||d==='undefined')return{day:'--',month:'---'};
+  try{
+    var s=String(d).trim();
+    if(s.indexOf('T')>-1)s=s.split('T')[0];
+    var p=s.split('-');
+    if(p.length===3){
+      var months=['GEN','FEB','MAR','ABR','MAI','JUN','JUL','AGO','SET','OCT','NOV','DES'];
+      var day=parseInt(p[2]);
+      var month=months[parseInt(p[1])-1]||'---';
+      return{day:day,month:month};
+    }
+    return{day:'--',month:'---'};
+  }catch(e){return{day:'--',month:'---'};}
+}
+function sb(s){
+  if(s==='Inscripcio oberta')return'bgn';
+  if(s==='Completada')return'bgr';
+  if(s==='Cancellada')return'brd';
+  return'bpk';
+}
+
+function renderComps(data){
+  var list=document.getElementById('comp-list');
+  if(!data||!data.length){
+    list.innerHTML='<div class="empty"><div style="font-size:2.5rem;margin-bottom:.75rem">&#x1F4C5;</div><p style="font-size:.85rem">Cap competicio per mostrar</p></div>';
+    return;
+  }
+  var sorted=data.slice().sort(function(a,b){return new Date(a.date||0)-new Date(b.date||0);});
+  list.innerHTML=sorted.map(function(c){
+    var d=fd(c.date);
+    return '<div class="comp-item">'
+      +'<div class="comp-date-block"><div class="comp-day">'+d.day+'</div><div class="comp-month">'+d.month+'</div></div>'
+      +'<div class="comp-body">'
+        +'<div class="comp-info">'
+          +'<div class="comp-name">'+c.name+'</div>'
+          +'<div class="comp-meta">'
+            +(c.place?'<span class="comp-place">&#x1F4CD; '+c.place+'</span>':'')
+            +'<span class="badge bpk">'+c.cat+'</span>'
+            +'<span class="badge '+sb(c.status)+'">'+c.status+'</span>'
+          +'</div>'
+          +(c.notes?'<div style="margin-top:.4rem;font-size:.75rem;color:var(--gr)">'+c.notes+'</div>':'')
+        +'</div>'
+        +(c.url?'<div class="comp-actions"><a href="'+c.url+'" target="_blank" class="btn-fed">&#x1F517; Inscripcio<br><span style="font-size:.6rem;opacity:.8">Federacio Catalana</span></a></div>':'')
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function filterComps(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  if(cat==='all'){renderComps(allComps);return;}
+  var filtered=allComps.filter(function(c){return c.cat===cat||c.status===cat;});
+  renderComps(filtered);
+}
+
+function updateStats(data){
+  document.getElementById('st-total').textContent=data.length;
+  document.getElementById('st-open').textContent=data.filter(function(c){return c.status==='Inscripcio oberta';}).length;
+  document.getElementById('st-pend').textContent=data.filter(function(c){return c.status==='Pendent';}).length;
+  document.getElementById('st-done').textContent=data.filter(function(c){return c.status==='Completada';}).length;
+}
+
+window.onload=function(){
+  var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
+  fetch(api+'?action=getAll&table=competicions')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      allComps=d||[];
+      updateStats(allComps);
+      renderComps(allComps);
+    })
+    .catch(function(){
+      document.getElementById('comp-list').innerHTML='<div class="empty"><p>Error carregant les competicions</p></div>';
+    });
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting)setTimeout(function(){e.target.classList.add('visible');},i*80);});},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+};
+</script>
+</body>
+</html>
