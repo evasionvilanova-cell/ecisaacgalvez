@@ -103,9 +103,7 @@ footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90de
 </footer>
 
 <script>
-function fd(d){
-  if(!d)return'';
-  try{return new Date(d+'T12:00:00').toLocaleDateString('ca-ES',{day:'2-digit',month:'long',year:'numeric'});}
+function fd(d){if(!d||d===''||d==='undefined')return'—';try{var s=String(d).trim();if(s.indexOf('T')>-1)s=s.split('T')[0];var p=s.split('-');if(p.length===3){var dt=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));return dt.toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'});}return s;}catch(e){return String(d);}});}
   catch(e){return d;}
 }
 

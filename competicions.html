@@ -119,8 +119,7 @@ footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90de
 <script>
 var allComps = [];
 
-function fd(d){
-  if(!d)return{day:'--',month:'---'};
+function fd(d){if(!d||d===''||d==='undefined')return'—';try{var s=String(d).trim();if(s.indexOf('T')>-1)s=s.split('T')[0];var p=s.split('-');if(p.length===3){var dt=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));return dt.toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'});}return s;}catch(e){return String(d);}};
   try{
     var dt=new Date(d+'T12:00:00');
     var months=['GEN','FEB','MAR','ABR','MAI','JUN','JUL','AGO','SET','OCT','NOV','DES'];
