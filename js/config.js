@@ -9,8 +9,8 @@
 //  les dades de l'antic Google Sheets perquè no es quedi buida.
 // ============================================================
 window.EC_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: "",
+  SUPABASE_URL: "https://dofujojcmeuqokjfstjx.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_uchtC1tX2giZKj4WtpC8gg_m1VzyjNo",
 
   // Correu de l'únic administrador. Al panell només caldrà posar la contrasenya.
   ADMIN_EMAIL: "ecisaacgalvez@gmail.com",
