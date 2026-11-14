@@ -656,9 +656,9 @@
   <style>
     @keyframes scroll-sponsors{from{transform:translateX(0)}to{transform:translateX(-50%)}}
     /* Logos amb els seus colors originals sobre targeta blanca (funciona amb qualsevol logo, amb o sense fons) */
-    .sp-logo-wrap{display:flex;align-items:center;justify-content:center;width:170px;height:90px;padding:.8rem 1.2rem;background:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);transition:transform .3s,box-shadow .3s;flex-shrink:0}
+    .sp-logo-wrap{display:flex;align-items:center;justify-content:center;width:180px;height:96px;padding:.7rem 1rem;background:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);transition:transform .3s,box-shadow .3s;flex-shrink:0}
     .sp-logo-wrap:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 12px 30px rgba(0,0,0,.25)}
-    .sp-logo-wrap img{max-height:62px;max-width:100%;object-fit:contain}
+    .sp-logo-wrap img{max-height:72px;max-width:100%;width:auto;height:auto;object-fit:contain}
     .sp-logo-wrap span{color:#1a0a12!important;text-align:center}
     #sponsor-track:hover{animation-play-state:paused}
   </style>
@@ -728,6 +728,8 @@
           }).join('');
           // Duplicar per efecte infinit
           track.innerHTML = items + items;
+          // Retalla automàticament els marges buits dels logos perquè es vegin grans
+          track.querySelectorAll('img').forEach(function(im){ ECDB.trimImg(im); });
         }).catch(function(){});
       // Títol banner
       ECDB.getConfig()

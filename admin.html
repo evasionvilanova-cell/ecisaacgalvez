@@ -641,7 +641,7 @@ function addUploaders(){
     l.querySelector('input').onchange=function(){
       var file=this.files[0];if(!file)return;
       toast('Pujant imatge...');
-      ECDB.upload(file).then(function(url){inp.value=url;if(inp.oninput)inp.oninput();toast('Imatge pujada!');}).catch(function(e){console.error(e);toast('Error pujant la imatge',false);});
+      (id==='sm-i'?ECDB.trimFile(file):Promise.resolve(file)).then(function(f2){return ECDB.upload(f2);}).then(function(url){inp.value=url;if(inp.oninput)inp.oninput();toast('Imatge pujada!');}).catch(function(e){console.error(e);toast('Error pujant la imatge',false);});
     };
     inp.parentNode.appendChild(l);
   });
@@ -879,7 +879,7 @@ function pujarLogos(input){
   var done=0,chain=Promise.resolve();
   toast('Pujant '+files.length+' logo(s)...');
   files.forEach(function(file){
-    chain=chain.then(function(){return ECDB.upload(file);}).then(function(url){
+    chain=chain.then(function(){return ECDB.trimFile(file);}).then(function(f2){return ECDB.upload(f2);}).then(function(url){
       var name=file.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
       return api('insert','patrocinadors',{name:name,img:url,web:''});
     }).then(function(){done++;});
