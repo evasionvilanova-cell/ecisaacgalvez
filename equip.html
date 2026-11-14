@@ -374,7 +374,7 @@
       <div class="section-tag">Els nostres atletes</div>
       <h2>Presentació de l'equip</h2>
     </div>
-    <div class="riders-grid">
+    <div class="riders-grid" id="riders-grid">
 
       <div class="rider-card reveal">
         <div class="rider-img-wrap">
@@ -542,6 +542,24 @@
     <p class="footer-copy">© 2025 Escola de Ciclisme Ecisaacgalvez · Tots els drets reservats</p>
   </footer>
 
+  <script>
+    // Corredors de l'equip: es carreguen des de l'admin (Corredors -> Cadets).
+    // Si encara no n'hi ha cap a la base de dades, es queden els d'aquesta pàgina.
+    document.addEventListener('DOMContentLoaded', function () {
+      ECDB.getAll('corredors').then(function (d) {
+        var l = (d || []).filter(function (r) { return String(r.cat).toLowerCase() === 'cadet'; })
+          .sort(function (a, b) { return (parseInt(a.num, 10) || 999) - (parseInt(b.num, 10) || 999); });
+        if (!l.length) return;
+        document.getElementById('riders-grid').innerHTML = l.map(function (r) {
+          return '<div class="rider-card reveal visible">'
+            + '<div class="rider-img-wrap">' + (r.img ? '<img loading="lazy" decoding="async" src="' + ecEsc(r.img) + '" alt="' + ecEsc(r.name) + '" />' : '') + '</div>'
+            + '<div class="rider-body"><div class="rider-num">Cadet' + (r.num ? ' · #' + ecEsc(r.num) : '') + '</div>'
+            + '<div class="rider-name">' + ecEsc(r.name) + '</div>'
+            + '<span class="rider-cat">' + ecEsc(r.notes || 'Cadet') + '</span></div></div>';
+        }).join('');
+      }).catch(function () {});
+    });
+  </script>
   <script>
     const reveals = document.querySelectorAll('.reveal');
     const obs = new IntersectionObserver((entries) => {

@@ -416,7 +416,8 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
           <div class="tab" onclick="swT(this,'tc-b')">Base</div>
         </div>
         <div class="tc on" id="tc-c">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:1rem"><button class="btn bp" onclick="openRM('cadet')">+ Cadet</button></div>
+          <p class="mig" style="margin:0 0 .8rem">Els <b>cadets</b> surten a la pàgina <b>Equip Cadet</b>. Prem &#x270F;&#xFE0F; per canviar el nom, la foto o el dorsal. El dorsal també decideix l'ordre.</p>
+          <div style="display:flex;justify-content:flex-end;gap:.5rem;margin-bottom:1rem"><button class="btn bs" id="rd-imp" style="display:none" onclick="importEquip()">&#x21E9; Importar els cadets de la pàgina Equip</button><button class="btn bp" onclick="openRM('cadet')">+ Cadet</button></div>
           <div class="rg" id="rg-cadet"><div class="ld"><div class="spin"></div></div></div>
         </div>
         <div class="tc" id="tc-i">
@@ -515,7 +516,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
       <select id="rm-c"><option value="cadet">Cadet</option><option value="infantil">Infantil</option><option value="base">Base</option></select>
     </div>
     <div class="fg">
-      <label>Foto - URL, Google Drive o ruta GitHub</label>
+      <label>Foto</label>
       <input id="rm-i" type="text" placeholder="https://drive.google.com/... o images/foto.jpg">
       <p class="hint">Drive: obre foto &rarr; Compartir &rarr; Qualsevol amb l'enllas &rarr; Copiar URL</p>
     </div>
@@ -1063,15 +1064,34 @@ function delSp(id){if(!confirm('Eliminar?'))return;api('delete','patrocinadors',
 function loadRiders(){
   ['cadet','infantil','base'].forEach(function(c){document.getElementById('rg-'+c).innerHTML='<div class="ld"><div class="spin"></div></div>';});
   api('getAll','corredors').then(function(d){
+    RIDERS=d||[];
+    var imp=document.getElementById('rd-imp');if(imp)imp.style.display=RIDERS.some(function(r){return r.cat==='cadet';})?'none':'';
     ['cadet','infantil','base'].forEach(function(cat){
-      var f=(d||[]).filter(function(r){return r.cat===cat;});
+      var f=(d||[]).filter(function(r){return r.cat===cat;}).sort(function(a,b){return(parseInt(a.num,10)||999)-(parseInt(b.num,10)||999);});
       var c=document.getElementById('rg-'+cat);
       c.innerHTML=f.map(function(r){
         var img=r.img?dv(r.img):'';
-        return '<div class="rc">'+(img?'<img src="'+img+'" alt="'+r.name+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">':'')+'<div class="rcph" style="'+(img?'display:none':'')+'">&#x1F6B4;</div><div class="rci"><div class="rcn">'+r.name+'</div><div class="rcc">'+(r.num?'#'+r.num+' &middot; ':'')+r.cat+'</div></div><div class="rca"><button class="rcb" onclick=\'editR('+JSON.stringify(r)+')\'>&#x270F;&#xFE0F;</button><button class="rcb" onclick="delR(\''+r.id+'\')">&#x1F5D1;</button></div></div>';
+        return '<div class="rc">'+(img?'<img src="'+img+'" alt="'+r.name+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">':'')+'<div class="rcph" style="'+(img?'display:none':'')+'">&#x1F6B4;</div><div class="rci"><div class="rcn">'+ecEsc(r.name)+'</div><div class="rcc">'+(r.num?'#'+ecEsc(r.num)+' &middot; ':'')+r.cat+'</div></div><div class="rca"><button class="rcb" onclick="editRid(\''+r.id+'\')">&#x270F;&#xFE0F;</button><button class="rcb" onclick="delR(\''+r.id+'\')">&#x1F5D1;</button></div></div>';
       }).join('')+'<div class="ac" onclick="openRM(\''+cat+'\')"><div class="ai">+</div><span>Afegir</span></div>';
     });
   });
+}
+var RIDERS=[];
+function editRid(id){var r=RIDERS.filter(function(x){return x.id===id;})[0];if(r)editR(r);}
+// Copia una sola vegada els cadets que hi ha escrits a la pàgina Equip Cadet
+function importEquip(){
+  if(!confirm("Copiar els corredors de la pàgina Equip Cadet a l'admin? Després podràs canviar noms, fotos i dorsals."))return;
+  fetch('equip.html',{cache:'no-store'}).then(function(r){return r.text();}).then(function(html){
+    var doc=new DOMParser().parseFromString(html,'text/html');
+    var rows=Array.prototype.map.call(doc.querySelectorAll('.riders-grid .rider-card'),function(c,i){
+      var img=c.querySelector('img'),nm=c.querySelector('.rider-name'),num=c.querySelector('.rider-num');
+      var n=num?(num.textContent.match(/#\s*(\d+)/)||[])[1]:'';
+      return {name:nm?nm.textContent.trim():'Corredor '+(i+1),cat:'cadet',img:img?img.getAttribute('src'):'',num:n||String(i+1),notes:''};
+    });
+    if(!rows.length)throw new Error('No he trobat corredors a la pàgina');
+    return ECDB.client.from('corredors').insert(rows).then(function(r){if(r.error)throw r.error;return rows.length;});
+  }).then(function(n){toast(n+' cadets importats! Ara edita els noms.');loadRiders();loadDash();})
+  .catch(function(e){console.error(e);toast('Error: '+(e.message||''),false);});
 }
 function dv(u){if(u.includes('drive.google.com/file/d/')){var m=u.match(/\/d\/([a-zA-Z0-9_-]+)/);if(m)return'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w400';}return u;}
 function openRM(cat){cat=cat||'cadet';document.getElementById('rm-id').value='';document.getElementById('rm-n').value='';document.getElementById('rm-c').value=cat;document.getElementById('rm-i').value='';document.getElementById('rm-num').value='';document.getElementById('rm-no').value='';document.getElementById('rm-t').textContent='Nou corredor';oM('mo-rider');}
