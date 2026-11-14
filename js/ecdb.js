@@ -48,6 +48,11 @@
       return sb.from('inscripcions').insert(row).then(ok);
     },
 
+    addMissatge: function (row) {
+      if (!READY) return Promise.reject(new Error('NO_DB'));
+      return sb.from('missatges').insert(row).then(ok);
+    },
+
     // ---------- Escriptura (només administradors) ----------
     insert: function (table, row) { delete row.id; return sb.from(table).insert(row).then(ok); },
     update: function (table, id, row) { row = Object.assign({}, row); delete row.id; return sb.from(table).update(row).eq('id', id).then(ok); },

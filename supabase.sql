@@ -55,6 +55,15 @@ create table if not exists public.inscripcions (
   notes_admin text
 );
 
+-- ---------- Missatges del formulari de contacte (privats) ----------
+create table if not exists public.missatges (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  nom text not null, email text not null, telefon text, motiu text,
+  missatge text not null check (char_length(missatge) <= 5000),
+  llegit boolean default false
+);
+
 -- ---------- ADMINISTRADORS ----------
 -- Només aquests correus poden entrar al panell. Pots afegir-ne més.
 create table if not exists public.admins (email text primary key);
@@ -70,7 +79,7 @@ $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['corredors','patrocinadors','competicions','carreres','config','noticies','inscripcions'] loop
+  foreach t in array array['corredors','patrocinadors','competicions','carreres','config','noticies','inscripcions','missatges'] loop
     execute format('alter table public.%I enable row level security', t);
     execute format('drop policy if exists "admin all" on public.%I', t);
     execute format('create policy "admin all" on public.%I for all to authenticated using (public.is_admin()) with check (public.is_admin())', t);
@@ -89,6 +98,11 @@ create policy "public read" on public.noticies for select using (activa = true);
 drop policy if exists "public insert" on public.inscripcions;
 create policy "public insert" on public.inscripcions for insert to anon, authenticated
   with check (consent_rgpd = true and estat = 'Pendent' and notes_admin is null);
+
+-- Tothom pot ENVIAR un missatge de contacte, però només els admins el poden llegir
+drop policy if exists "public insert" on public.missatges;
+create policy "public insert" on public.missatges for insert to anon, authenticated
+  with check (llegit = false);
 
 -- ---------- Imatges (Storage) ----------
 insert into storage.buckets (id, name, public) values ('imatges', 'imatges', true)

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Contacte · Ecisaacgalvez</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:#fff;color:#1a0a12;overflow-x:hidden}
+:root{--pk:#fc449d;--pkl:#ff7ec3;--pkd:#c4207a;--off:#fff5fb;--gr:#6b3a55;--dk:#1a0a12;--dk3:#3a0a25}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2.5rem;background:linear-gradient(135deg,var(--dk),var(--dk3));box-shadow:0 2px 30px rgba(252,68,157,.2)}
+.nl{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.1rem;color:#fff;text-decoration:none}
+.nl em{color:var(--pkl);font-style:normal}
+.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,.8);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--pkl)}
+.btn-nav{background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff!important;padding:.45rem 1.2rem!important;border-radius:50px;box-shadow:0 4px 15px rgba(252,68,157,.4)}
+.hero-car{min-height:55vh;background:linear-gradient(135deg,var(--dk) 0%,var(--dk3) 60%,#5a1040 100%);display:flex;align-items:flex-end;padding:120px 2.5rem 4rem;position:relative;overflow:hidden}
+.hero-car::before{content:'';position:absolute;top:-40%;right:-10%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(252,68,157,.2) 0%,transparent 65%);border-radius:50%}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.htag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(252,68,157,.15);border:1px solid rgba(252,68,157,.4);color:var(--pkl);font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:.32rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+h1{font-family:'Raleway',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;color:#fff;line-height:1}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--pk),var(--pkl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.hero-sub{margin-top:1.2rem;font-size:1rem;font-weight:300;color:rgba(255,255,255,.65);line-height:1.7;max-width:500px}
+section{padding:5rem 2.5rem}
+.stag{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--pk);margin-bottom:.6rem}
+h2{font-family:'Raleway',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;line-height:1.05}
+/* RACES GRID */
+.races-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2rem;margin-top:2.5rem}
+.race-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid rgba(252,68,157,.1);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .3s}
+.race-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(252,68,157,.2);border-color:rgba(252,68,157,.3)}
+.race-img-w{position:relative;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(135deg,var(--pk),var(--pkd))}
+.race-img-w img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.race-card:hover .race-img-w img{transform:scale(1.04)}
+.race-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(255,255,255,.6)}
+.race-edition{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.6);color:#fff;border-radius:20px;padding:3px 10px;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.race-body{padding:1.5rem}
+.race-date{font-size:.72rem;font-weight:700;color:var(--pk);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.race-name{font-family:'Raleway',sans-serif;font-size:1.4rem;font-weight:900;line-height:1.2}
+.race-desc{margin-top:.5rem;font-size:.85rem;color:var(--gr);line-height:1.65}
+.race-actions{margin-top:1.2rem;display:flex;gap:.75rem}
+.btn-info{display:inline-flex;align-items:center;gap:.35rem;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;text-decoration:none;border-radius:8px;padding:.55rem 1.1rem;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 12px rgba(252,68,157,.25);transition:all .2s}
+.btn-info:hover{box-shadow:0 6px 18px rgba(252,68,157,.45);transform:translateY(-1px)}
+.ld{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--gr);font-size:.82rem;gap:.5rem}
+.spin{width:16px;height:16px;border:2px solid rgba(252,68,157,.2);border-top-color:var(--pk);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gr)}
+/* CTA */
+#cta{background:linear-gradient(135deg,var(--pk),var(--pkd));padding:5rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+#cta::before{content:'';position:absolute;top:-50%;left:-10%;width:50vw;height:50vw;background:rgba(255,255,255,.08);border-radius:50%}
+#cta h2{color:#fff;font-family:'Raleway',sans-serif;font-size:2.5rem;font-weight:900;position:relative;z-index:2}
+#cta p{color:rgba(255,255,255,.8);font-size:1rem;max-width:500px;margin:1rem auto 2rem;line-height:1.7;position:relative;z-index:2}
+.btn-white{display:inline-block;background:#fff;color:var(--pk);text-decoration:none;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 2.2rem;border-radius:50px;box-shadow:0 8px 25px rgba(0,0,0,.15);transition:all .25s;position:relative;z-index:2}
+.btn-white:hover{box-shadow:0 12px 35px rgba(0,0,0,.25);transform:translateY(-2px)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90deg,var(--pk),var(--pkl),var(--pk)) 1;padding:2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.2)}
+@media(max-width:900px){.races-grid{grid-template-columns:1fr}.nav-links{display:none}nav{padding:.9rem 1.2rem}section{padding:3.5rem 1.2rem}}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/ecdb.js"></script>
+  <script src="js/web.js"></script>
+<style>
+.hero-car h1 em{font-style:normal}
+.ct-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:3rem;max-width:1100px;margin:0 auto;align-items:start}
+.ct-info p.lead{color:var(--gr);line-height:1.75;margin:1rem 0 2rem}
+.ct-item{display:flex;gap:1rem;align-items:center;background:#fff;border-radius:16px;padding:1rem 1.2rem;margin-bottom:.8rem;box-shadow:0 6px 24px rgba(252,68,157,.08);text-decoration:none;color:var(--dk);transition:transform .2s}
+a.ct-item:hover{transform:translateX(4px)}
+.ct-ic{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--pk),var(--pkd));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.ct-item small{display:block;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pk)}
+.ct-item b{font-size:.92rem;word-break:break-word}
+.ct-form{background:linear-gradient(135deg,var(--dk),var(--dk3));border-radius:24px;padding:2.4rem;color:#fff;box-shadow:0 30px 60px rgba(26,10,18,.25)}
+.ct-form h3{font-family:'Raleway',sans-serif;font-size:1.6rem;font-weight:900;margin-bottom:1.4rem}
+.ct-g{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+.ct-f{margin-bottom:1rem}.ct-full{grid-column:1/-1}
+.ct-f label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pkl);margin-bottom:.45rem}
+.ct-f input,.ct-f select,.ct-f textarea{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;color:#fff;font-family:inherit;font-size:.9rem;padding:.8rem 1rem;outline:none;transition:border-color .2s}
+.ct-f select option{color:#1a0a12}
+.ct-f textarea{min-height:140px;resize:vertical}
+.ct-f input:focus,.ct-f select:focus,.ct-f textarea:focus{border-color:var(--pk)}
+.ct-f input::placeholder,.ct-f textarea::placeholder{color:rgba(255,255,255,.35)}
+.ct-chk{display:flex;gap:.6rem;align-items:flex-start;font-size:.78rem;color:rgba(255,255,255,.7);margin:.4rem 0 1rem;cursor:pointer;line-height:1.45}
+.ct-chk input{margin-top:.15rem;accent-color:var(--pk)}
+.bad{border-color:#ff5a5a!important}
+.ct-btn{width:100%;border:0;cursor:pointer;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;font-family:inherit;font-weight:800;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;padding:1rem;border-radius:50px;box-shadow:0 10px 30px rgba(252,68,157,.4)}
+.ct-btn:disabled{opacity:.6}
+.ct-err{color:#ffb3b3;font-size:.85rem;min-height:1em;margin-bottom:.8rem}
+.ct-ok{text-align:center;padding:2.5rem 1rem}.ct-ok .big{font-size:3rem}.ct-ok h3{margin:.6rem 0}
+.ct-ok p{color:rgba(255,255,255,.75);line-height:1.6}
+.ct-hp{position:absolute;left:-9999px}
+.ct-map{border:0;width:100%;height:340px;border-radius:24px;display:block;max-width:1100px;margin:0 auto}
+@media(max-width:900px){.ct-wrap{grid-template-columns:1fr}.ct-g{grid-template-columns:1fr}.ct-form{padding:1.6rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nl">Eci<em>Isaac</em>Galvez</a>
+  <ul class="nav-links">
+    <li><a href="escola.html">Escola</a></li>
+    <li><a href="competicions.html">Competicions</a></li>
+    <li><a href="carreres.html">Carreres</a></li>
+    <li><a href="equip.html">Equip Cadet</a></li>
+    <li><a href="contacte.html" class="active">Contacte</a></li>
+    <li><a href="index.html#inscripcio" class="btn-nav">Inscriu-te</a></li>
+    <li><a href="admin.html" style="color:rgba(255,255,255,0.3);font-size:0.7rem">&#x2699;&#xFE0F;</a></li>
+  </ul>
+</nav>
+
+<div class="hero-car">
+  <div class="hero-content">
+    <div class="htag">&#x2709;&#xFE0F; Parlem</div>
+    <h1>Contacta<em>amb nosaltres</em></h1>
+    <p class="hero-sub">Dubtes sobre l'escola, inscripcions, patrocinis o curses? Escriu-nos i et respondrem ben aviat.</p>
+  </div>
+</div>
+
+<section style="background:var(--off)">
+  <div class="ct-wrap">
+    <div class="ct-info reveal">
+      <div class="stag">On trobar-nos</div>
+      <h2>Som a Vilanova i la Geltrú</h2>
+      <p class="lead">Entrenem al circuit de Vilanova i la Geltrú. Si vols venir a provar una sessió, envia'ns un missatge i et direm el dia i l'hora.</p>
+      <a class="ct-item" id="ct-email" href="mailto:ecisaacgalvez@gmail.com"><div class="ct-ic">&#x2709;&#xFE0F;</div><div><small>Correu</small><b data-ct="contact_email">ecisaacgalvez@gmail.com</b></div></a>
+      <a class="ct-item" id="ct-tel" href="#" style="display:none"><div class="ct-ic">&#x1F4DE;</div><div><small>Telèfon</small><b data-ct="contact_tel"></b></div></a>
+      <a class="ct-item" id="ct-ig" href="https://www.instagram.com/ecisaacgalvez/" target="_blank" rel="noopener"><div class="ct-ic">&#x1F4F8;</div><div><small>Instagram</small><b>@ecisaacgalvez</b></div></a>
+      <a class="ct-item" id="ct-fb" href="https://www.facebook.com/profile.php?id=100087175615654" target="_blank" rel="noopener"><div class="ct-ic">&#x1F44D;</div><div><small>Facebook</small><b>Escola de Ciclisme Isaac Gálvez</b></div></a>
+      <div class="ct-item"><div class="ct-ic">&#x1F4CD;</div><div><small>Adreça</small><b>Ronda Ibèrica, 66 · Vilanova i la Geltrú</b></div></div>
+    </div>
+
+    <div class="ct-form reveal" id="ct-box">
+      <h3>Envia'ns un missatge</h3>
+      <form id="ct-form" novalidate>
+        <div class="ct-g">
+          <div class="ct-f"><label>Nom *</label><input name="nom" required placeholder="El teu nom"></div>
+          <div class="ct-f"><label>Telèfon</label><input name="telefon" type="tel" placeholder="600 000 000"></div>
+          <div class="ct-f ct-full"><label>Correu electrònic *</label><input name="email" type="email" required placeholder="correu@exemple.com"></div>
+          <div class="ct-f ct-full"><label>Motiu</label>
+            <select name="motiu">
+              <option>Informació general</option>
+              <option>Inscripcions a l'escola</option>
+              <option>Provar una sessió</option>
+              <option>Patrocini</option>
+              <option>Curses i competicions</option>
+              <option>Altres</option>
+            </select></div>
+          <div class="ct-f ct-full"><label>Missatge *</label><textarea name="missatge" required placeholder="Explica'ns com et podem ajudar"></textarea></div>
+        </div>
+        <input class="ct-hp" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label class="ct-chk"><input type="checkbox" name="consent" required> Accepto que l'Escola de Ciclisme Isaac Gálvez faci servir aquestes dades només per respondre el meu missatge. *</label>
+        <p class="ct-err" id="ct-err"></p>
+        <button class="ct-btn" id="ct-btn" type="submit">Enviar missatge &rarr;</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;background:var(--off)">
+  <iframe class="ct-map" loading="lazy" title="Mapa" src="https://www.google.com/maps?q=Ronda+Iberica+66+Vilanova+i+la+Geltru&z=15&output=embed"></iframe>
+</section>
+
+<footer>
+  <p class="footer-copy">&copy; 2025 Escola de Ciclisme Ecisaacgalvez &middot; Vilanova i la Geltru</p>
+</footer>
+
+<script>
+window.onload=function(){
+  // Dades de contacte editables des de l'admin (Pàgina inici)
+  ECDB.getConfig().then(function(c){
+    if(c.contact_email){var e=document.getElementById('ct-email');e.href='mailto:'+c.contact_email;e.querySelector('b').textContent=c.contact_email;}
+    if(c.contact_tel){var t=document.getElementById('ct-tel');t.href='tel:'+String(c.contact_tel).replace(/\s/g,'');t.querySelector('b').textContent=c.contact_tel;t.style.display='';}
+    if(c.social_ig&&/^https?:/.test(c.social_ig))document.getElementById('ct-ig').href=c.social_ig;
+    if(c.social_fb&&/^https?:/.test(c.social_fb))document.getElementById('ct-fb').href=c.social_fb;
+  }).catch(function(){});
+
+  document.getElementById('ct-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var f=e.target,err=document.getElementById('ct-err'),btn=document.getElementById('ct-btn');
+    if(f.web.value)return; // antispam
+    f.querySelectorAll('.bad').forEach(function(x){x.classList.remove('bad');});
+    var bad=Array.prototype.filter.call(f.querySelectorAll('[required]'),function(el){return el.type==='checkbox'?!el.checked:!el.value.trim();});
+    if(f.email.value&&!/^\S+@\S+\.\S+$/.test(f.email.value))bad.push(f.email);
+    if(bad.length){bad.forEach(function(x){x.classList.add('bad');});err.textContent='Revisa els camps obligatoris (*).';return;}
+    var d={nom:f.nom.value.trim(),email:f.email.value.trim(),telefon:f.telefon.value.trim(),motiu:f.motiu.value,missatge:f.missatge.value.trim().slice(0,5000)};
+    btn.disabled=true;btn.textContent='Enviant...';err.textContent='';
+    ECDB.addMissatge(d).then(function(){
+      document.getElementById('ct-box').innerHTML='<div class="ct-ok"><div class="big">&#x1F6B4;&#x200D;&#x2640;&#xFE0F;</div><h3>Missatge enviat!</h3><p>Gràcies, '+ecEsc(d.nom)+'. Et respondrem a '+ecEsc(d.email)+' tan aviat com puguem.</p></div>';
+    }).catch(function(ex){
+      console.error(ex);err.textContent="No s'ha pogut enviar. Escriu-nos a ecisaacgalvez@gmail.com";
+      btn.disabled=false;btn.innerHTML='Enviar missatge &rarr;';
+    });
+  });
+
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting)setTimeout(function(){e.target.classList.add('visible');},i*80);});},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+};
+</script>
+</body>
+</html>
