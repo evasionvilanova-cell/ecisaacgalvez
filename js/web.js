@@ -53,8 +53,51 @@
     mo.classList.add('open');
   };
 
+  // ---------- Menú mòbil (totes les pàgines) ----------
+  css += '.ec-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;background:none;border:0;cursor:pointer;padding:8px;margin-left:auto;z-index:1002}'
+    + '.ec-burger span{display:block;width:26px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}'
+    + '.ec-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}.ec-burger.open span:nth-child(2){opacity:0}.ec-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}'
+    + '.ec-mmenu{display:none;position:fixed;left:0;right:0;bottom:0;background:rgba(26,10,18,.98);backdrop-filter:blur(10px);flex-direction:column;padding:1rem 1.6rem 2rem;z-index:1001;overflow-y:auto}'
+    + '.ec-mmenu.open{display:flex}.ec-mmenu a{color:rgba(255,255,255,.85);text-decoration:none;font:700 1.05rem/1 Montserrat,Raleway,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:1.1rem 0;border-bottom:1px solid rgba(255,255,255,.07)}'
+    + '.ec-mmenu a.active,.ec-mmenu a:hover{color:#ff7ec3}.ec-mmenu a.ec-cta{margin-top:1.2rem;border:0;text-align:center;background:linear-gradient(135deg,#fc449d,#c4207a);color:#fff;border-radius:50px;padding:1rem}'
+    + '@media(max-width:900px){.ec-burger{display:flex}}@media(min-width:901px){.ec-mmenu{display:none!important}}';
+  st.textContent = css;
+
+  function setupMenu() {
+    var nav = document.querySelector('nav'); if (!nav) return;
+    // La portada ja tenia botó i menú propis (sense funció): els substituïm pel menú comú
+    var oldB = document.getElementById('hamburger'), oldM = document.getElementById('mobile-menu');
+    if (oldB) oldB.remove(); if (oldM) oldM.remove();
+    var links = Array.prototype.slice.call(nav.querySelectorAll('.nav-links a'));
+    if (!links.length) return;
+    var btn = document.createElement('button');
+    btn.className = 'ec-burger'; btn.setAttribute('aria-label', 'Obrir el menú'); btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span></span><span></span><span></span>';
+    var menu = document.createElement('div'); menu.className = 'ec-mmenu'; menu.id = 'ec-mmenu';
+    menu.innerHTML = links.map(function (a) {
+      var adm = /admin\.html/.test(a.getAttribute('href'));
+      var cta = a.classList.contains('btn-nav');
+      return '<a href="' + a.getAttribute('href') + '" class="' + (a.classList.contains('active') ? 'active ' : '') + (cta ? 'ec-cta' : '') + '"' + (adm ? ' style="opacity:.4;font-size:.8rem"' : '') + '>' + (adm ? '&#x2699;&#xFE0F; Admin' : a.textContent.trim()) + '</a>';
+    }).join('');
+    // Ordena: l'admin al final, després del botó d'inscripció
+    var admin = menu.querySelector('a[href*="admin.html"]'); if (admin) menu.appendChild(admin);
+    var toggle = function (open) {
+      open = open === undefined ? !menu.classList.contains('open') : open;
+      menu.style.top = nav.getBoundingClientRect().bottom + 'px';
+      menu.classList.toggle('open', open); btn.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    btn.onclick = function () { toggle(); };
+    menu.addEventListener('click', function (e) { if (e.target.tagName === 'A') toggle(false); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 900) toggle(false); });
+    window.toggleMenu = function () { toggle(); };
+    nav.appendChild(btn); document.body.appendChild(menu);
+  }
+
   function start() {
     document.body.appendChild(mo);
+    setupMenu();
 
     // Textos editables
     if (document.querySelector('[data-cfg]')) {
