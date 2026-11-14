@@ -258,6 +258,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
       <div class="ns">Contingut</div>
       <div class="ni" onclick="showP('home')"><span>&#x1F3E0;</span> Pagina inici</div>
       <div class="ni" onclick="showP('noticies')"><span>&#x1F4E3;</span> Notícies / avisos</div>
+      <div class="ni" onclick="openContacte()"><span>&#x1F4DE;</span> Contacte i xarxes</div>
       <div class="ni" onclick="showP('patrocinadors')"><span>&#x1F3F7;&#xFE0F;</span> Patrocinadors</div>
       <div class="ni" onclick="showP('corredors')"><span>&#x1F6B4;</span> Corredors</div>
       <div class="ns">Competicions</div>
@@ -356,11 +357,17 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
         </div>
         <div class="tc" id="t-contact">
           <div class="card"><div class="ch"><h3>Contacte i xarxes</h3></div><div class="cb">
+            <p class="mig" style="margin:0 0 1rem">Es mostren a la pàgina <b>Contacte</b>. <b>Deixa un camp en blanc per amagar-lo</b> (per exemple, esborra Facebook si no el feu servir). Després prem <b>Guardar canvis</b>.</p>
             <div class="g2">
-              <div class="fg"><label>Email</label><input id="h-em" type="email"></div>
-              <div class="fg"><label>Telefon</label><input id="h-tel" type="tel"></div>
-              <div class="fg"><label>Instagram URL</label><input id="h-ig" type="text"></div>
-              <div class="fg"><label>Facebook URL</label><input id="h-fb" type="text"></div>
+              <div class="fg"><label>Email</label><input id="h-em" type="email" placeholder="ecisaacgalvez@gmail.com"></div>
+              <div class="fg"><label>Telèfon</label><input id="h-tel" type="tel" placeholder="600 000 000"></div>
+              <div class="fg"><label>WhatsApp (número)</label><input id="h-wa" type="tel" placeholder="34600000000"></div>
+              <div class="fg"><label>Adreça</label><input id="h-adr" type="text" placeholder="Ronda Ibèrica, 66 · Vilanova i la Geltrú"></div>
+              <div class="fg"><label>Instagram (enllaç)</label><input id="h-ig" type="text" placeholder="https://www.instagram.com/ecisaacgalvez/"></div>
+              <div class="fg"><label>Facebook (enllaç)</label><input id="h-fb" type="text" placeholder="https://www.facebook.com/..."></div>
+              <div class="fg"><label>TikTok (enllaç)</label><input id="h-tt" type="text" placeholder="https://www.tiktok.com/@..."></div>
+              <div class="fg"><label>YouTube (enllaç)</label><input id="h-yt" type="text" placeholder="https://www.youtube.com/@..."></div>
+              <div class="fg"><label>Strava (enllaç)</label><input id="h-st" type="text" placeholder="https://www.strava.com/clubs/..."></div>
             </div>
           </div></div>
         </div>
@@ -682,6 +689,13 @@ function exportIns(){
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='inscripcions-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }
 
+function openContacte(){
+  showP('home');
+  var t=document.querySelector('#p-home .tab[onclick*="t-contact"]');if(t)swT(t,'t-contact');
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.toggle('on',(n.getAttribute('onclick')||'').indexOf('openContacte')>-1);});
+  document.getElementById('ptitle').textContent='Contacte i xarxes';
+  setTimeout(function(){document.getElementById('t-contact').scrollIntoView({behavior:'smooth',block:'start'});},50);
+}
 // ---------- DISSENY ----------
 function renderTemes(){
   var cur=document.getElementById('h-tema').value||'rosa',T=window.EC_TEMES||{};
@@ -817,7 +831,7 @@ document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',
 
 function loadAll(){loadDash();loadConfig();loadIns();loadMsg();}
 
-var CM=[['h-tema','tema'],['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb']];
+var CM=[['h-tema','tema'],['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb'],['h-wa','contact_wa'],['h-adr','contact_adreca'],['h-tt','social_tt'],['h-yt','social_yt'],['h-st','social_strava']];
 
 function loadConfig(){
   apiCfg().then(function(cfg){

@@ -125,11 +125,7 @@ a.ct-item:hover{transform:translateX(4px)}
       <div class="stag">On trobar-nos</div>
       <h2>Som a Vilanova i la Geltrú</h2>
       <p class="lead">Entrenem al circuit de Vilanova i la Geltrú. Si vols venir a provar una sessió, envia'ns un missatge i et direm el dia i l'hora.</p>
-      <a class="ct-item" id="ct-email" href="mailto:ecisaacgalvez@gmail.com"><div class="ct-ic">&#x2709;&#xFE0F;</div><div><small>Correu</small><b data-ct="contact_email">ecisaacgalvez@gmail.com</b></div></a>
-      <a class="ct-item" id="ct-tel" href="#" style="display:none"><div class="ct-ic">&#x1F4DE;</div><div><small>Telèfon</small><b data-ct="contact_tel"></b></div></a>
-      <a class="ct-item" id="ct-ig" href="https://www.instagram.com/ecisaacgalvez/" target="_blank" rel="noopener"><div class="ct-ic">&#x1F4F8;</div><div><small>Instagram</small><b>@ecisaacgalvez</b></div></a>
-      <a class="ct-item" id="ct-fb" href="https://www.facebook.com/profile.php?id=100087175615654" target="_blank" rel="noopener"><div class="ct-ic">&#x1F44D;</div><div><small>Facebook</small><b>Escola de Ciclisme Isaac Gálvez</b></div></a>
-      <div class="ct-item"><div class="ct-ic">&#x1F4CD;</div><div><small>Adreça</small><b>Ronda Ibèrica, 66 · Vilanova i la Geltrú</b></div></div>
+      <div id="ct-items"></div>
     </div>
 
     <div class="ct-form reveal" id="ct-box">
@@ -169,13 +165,31 @@ a.ct-item:hover{transform:translateX(4px)}
 
 <script>
 window.onload=function(){
-  // Dades de contacte editables des de l'admin (Pàgina inici)
-  ECDB.getConfig().then(function(c){
-    if(c.contact_email){var e=document.getElementById('ct-email');e.href='mailto:'+c.contact_email;e.querySelector('b').textContent=c.contact_email;}
-    if(c.contact_tel){var t=document.getElementById('ct-tel');t.href='tel:'+String(c.contact_tel).replace(/\s/g,'');t.querySelector('b').textContent=c.contact_tel;t.style.display='';}
-    if(c.social_ig&&/^https?:/.test(c.social_ig))document.getElementById('ct-ig').href=c.social_ig;
-    if(c.social_fb&&/^https?:/.test(c.social_fb))document.getElementById('ct-fb').href=c.social_fb;
-  }).catch(function(){});
+  // Dades de contacte: s'editen a l'admin (Contacte i xarxes). Camp buit = no es mostra.
+  var DEF={contact_email:'ecisaacgalvez@gmail.com',contact_tel:'',contact_wa:'',contact_adreca:'Ronda Ibèrica, 66 · Vilanova i la Geltrú',
+    social_ig:'https://www.instagram.com/ecisaacgalvez/',social_fb:'https://www.facebook.com/profile.php?id=100087175615654',social_tt:'',social_yt:'',social_strava:''};
+  function url(u){u=String(u||'').trim();if(!u)return'';return /^https?:\/\//i.test(u)?u:'https://'+u.replace(/^\/+/,'');}
+  function handle(u,fallback){var m=String(u).replace(/[?#].*$/,'').replace(/\/+$/,'').split('/').pop();return m&&m.indexOf('.')===-1&&m.indexOf('=')===-1?'@'+m.replace(/^@/,''):fallback;}
+  function render(c){
+    var v=function(k){return c[k]!==undefined?String(c[k]).trim():DEF[k];};
+    var it=[];
+    if(v('contact_email'))it.push(['&#x2709;&#xFE0F;','Correu',v('contact_email'),'mailto:'+v('contact_email')]);
+    if(v('contact_tel'))it.push(['&#x1F4DE;','Telèfon',v('contact_tel'),'tel:'+v('contact_tel').replace(/\s/g,'')]);
+    if(v('contact_wa'))it.push(['&#x1F4AC;','WhatsApp',v('contact_wa'),'https://wa.me/'+v('contact_wa').replace(/\D/g,'')]);
+    if(v('social_ig'))it.push(['&#x1F4F8;','Instagram',handle(v('social_ig'),'Instagram'),url(v('social_ig'))]);
+    if(v('social_fb'))it.push(['&#x1F44D;','Facebook','Escola de Ciclisme Isaac Gálvez',url(v('social_fb'))]);
+    if(v('social_tt'))it.push(['&#x1F3B5;','TikTok',handle(v('social_tt'),'TikTok'),url(v('social_tt'))]);
+    if(v('social_yt'))it.push(['&#x25B6;&#xFE0F;','YouTube',handle(v('social_yt'),'YouTube'),url(v('social_yt'))]);
+    if(v('social_strava'))it.push(['&#x1F6B4;','Strava','Club a Strava',url(v('social_strava'))]);
+    if(v('contact_adreca'))it.push(['&#x1F4CD;','Adreça',v('contact_adreca'),'https://www.google.com/maps/search/'+encodeURIComponent(v('contact_adreca'))]);
+    document.getElementById('ct-items').innerHTML=it.map(function(x){
+      var ext=/^https?:/.test(x[3]);
+      return '<a class="ct-item" href="'+ecEsc(x[3])+'"'+(ext?' target="_blank" rel="noopener"':'')+'><div class="ct-ic">'+x[0]+'</div><div><small>'+x[1]+'</small><b>'+ecEsc(x[2])+'</b></div></a>';
+    }).join('');
+    if(v('contact_adreca')){var m=document.querySelector('.ct-map');if(m)m.src='https://www.google.com/maps?q='+encodeURIComponent(v('contact_adreca'))+'&z=15&output=embed';}
+  }
+  render({});
+  ECDB.getConfig().then(render).catch(function(){});
 
   document.getElementById('ct-form').addEventListener('submit',function(e){
     e.preventDefault();
