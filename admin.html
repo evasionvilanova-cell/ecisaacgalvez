@@ -178,11 +178,27 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 .toast{position:fixed;bottom:2rem;right:2rem;z-index:200;background:#1a0a12;color:#fff;border-radius:12px;padding:.85rem 1.2rem;font-size:.83rem;font-weight:600;display:flex;align-items:center;gap:.5rem;box-shadow:0 8px 30px rgba(0,0,0,0.3);transform:translateY(100px);opacity:0;transition:all .35s;max-width:320px}
 .toast.show{transform:none;opacity:1}
 
+/* ---------- Mòbil: menú lateral desplegable ---------- */
+.tb-menu{display:none;background:none;border:0;width:40px;height:40px;margin:-.3rem .4rem -.3rem -.6rem;cursor:pointer;flex-direction:column;justify-content:center;gap:5px;padding:8px}
+.tb-menu span{display:block;height:2px;background:#1a0a12;border-radius:2px}
+.sb-back{display:none}
 @media(max-width:768px){
   :root{--sw:0px}
-  .sb{transform:translateX(-240px)}
+  .sb{width:270px;transform:translateX(-300px);transition:transform .25s ease;z-index:60}
+  .sb.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .sb nav,.sb .sbn{overflow-y:auto}
+  .sb-back.open{display:block;position:fixed;inset:0;background:rgba(26,10,18,.5);z-index:55}
   .main{margin-left:0}
+  .tb-menu{display:flex}
+  .tb{padding:.7rem 1rem;gap:.5rem}
+  .tb h2{font-size:1.15rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tb .btn{padding:.55rem .8rem;font-size:.62rem}
+  .ct{padding:1rem}
   .g2,.g3{grid-template-columns:1fr}
+  .tbl{display:block;overflow-x:auto;white-space:nowrap}
+  .card .cb{overflow-x:auto}
+  .mb2{padding:1.4rem 1.1rem}
+  .sp-row{grid-template-columns:1fr}
 }
 </style>
 <style>
@@ -266,7 +282,8 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 
 <!-- APP -->
 <div id="app">
-  <aside class="sb">
+  <div class="sb-back" id="sb-back" onclick="sbToggle(false)"></div>
+  <aside class="sb" id="sb">
     <div class="sb-logo">
       <div class="nm">Eci<em>Isaac</em>Galvez</div>
       <small>Panel Admin</small>
@@ -298,6 +315,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 
   <main class="main">
     <div class="tb">
+      <button class="tb-menu" aria-label="Menú" onclick="sbToggle()"><span></span><span></span><span></span></button>
       <h2 id="ptitle">Resum general</h2>
       <div class="tbr">
         <span class="sv" id="sv">&#x2713; Guardat!</span>
@@ -771,6 +789,9 @@ function exportIns(){
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='inscripcions-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }
 
+function sbToggle(o){var sb=document.getElementById('sb'),bk=document.getElementById('sb-back');o=o===undefined?!sb.classList.contains('open'):o;sb.classList.toggle('open',o);bk.classList.toggle('open',o);}
+// En triar una secció al mòbil, el menú es tanca sol
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#sb .ni'))sbToggle(false);});
 function openContacte(){
   showP('home');
   var t=document.querySelector('#p-home .tab[onclick*="t-contact"]');if(t)swT(t,'t-contact');
