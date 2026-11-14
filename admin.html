@@ -347,9 +347,11 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
       <!-- PATROCINADORS -->
       <div class="panel" id="p-patrocinadors">
         <div class="card">
-          <div class="ch"><h3>Logos patrocinadors</h3><button class="btn bp sm" onclick="openSM()">+ Afegir</button></div>
+          <div class="ch"><h3>Logos patrocinadors</h3><div style="display:flex;gap:.5rem">
+            <label class="btn bp sm" style="cursor:pointer">&#x1F4F7; Pujar logos<input type="file" accept="image/*" multiple style="display:none" onchange="pujarLogos(this)"></label>
+            <button class="btn bs sm" onclick="openSM()">+ Afegir manual</button></div></div>
           <div class="cb">
-            <p style="font-size:.75rem;color:#6b3a55;margin-bottom:1rem">URL directa d'imatge o ruta <code>images/logo.png</code> del repositori GitHub.</p>
+            <p style="font-size:.75rem;color:#6b3a55;margin-bottom:1rem">Prem <b>Pujar logos</b> i tria un o diversos arxius de l'ordinador o el mòbil: es pugen i es publiquen al moment. Fes clic a un logo per canviar-ne el nom o afegir-hi la web.</p>
             <div class="spg" id="spg"><div class="ld"><div class="spin"></div></div></div>
           </div>
         </div>
@@ -452,8 +454,9 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
     <input type="hidden" id="sm-id">
     <div class="fg"><label>Nom</label><input id="sm-n" type="text" placeholder="Ex: Sagales"></div>
     <div class="fg">
-      <label>Logo URL o ruta GitHub</label>
-      <input id="sm-i" type="text" placeholder="https://... o images/sagales.png">
+      <label>Logo</label>
+      <img id="sm-prev" style="max-height:70px;max-width:100%;margin:.4rem 0;display:none">
+      <input id="sm-i" type="text" placeholder="Puja'l amb el botó de sota o enganxa una URL" oninput="spPrev()">
     </div>
     <div class="fg"><label>Web (opcional)</label><input id="sm-w" type="text" placeholder="https://..."></div>
     <div class="mf">
@@ -603,7 +606,7 @@ function addUploaders(){
     l.querySelector('input').onchange=function(){
       var file=this.files[0];if(!file)return;
       toast('Pujant imatge...');
-      ECDB.upload(file).then(function(url){inp.value=url;toast('Imatge pujada!');}).catch(function(e){console.error(e);toast('Error pujant la imatge',false);});
+      ECDB.upload(file).then(function(url){inp.value=url;if(inp.oninput)inp.oninput();toast('Imatge pujada!');}).catch(function(e){console.error(e);toast('Error pujant la imatge',false);});
     };
     inp.parentNode.appendChild(l);
   });
@@ -779,13 +782,33 @@ function loadDash(){
   }).catch(function(e){console.error(e);});
 }
 
+var SPS=[];
 function loadSponsors(){
   var g=document.getElementById('spg');g.innerHTML='<div class="ld"><div class="spin"></div></div>';
   api('getAll','patrocinadors').then(function(d){
-    g.innerHTML=(d||[]).map(function(s){return '<div class="spi"><img src="'+s.img+'" alt="'+s.name+'" onerror="this.style.display=\'none\'"><div class="spnm">'+s.name+'</div><button class="spdel" onclick="delSp(\''+s.id+'\')">&#x2715;</button></div>';}).join('')+'<div class="spi spadd" onclick="openSM()"><div style="font-size:1.6rem">+</div><div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-top:4px">Afegir</div></div>';
+    SPS=d||[];
+    g.innerHTML=SPS.map(function(s){return '<div class="spi" style="cursor:pointer" onclick="editSM(\''+s.id+'\')" title="Editar"><img src="'+ecEsc(s.img)+'" alt="'+ecEsc(s.name)+'" onerror="this.style.display=\'none\'"><div class="spnm">'+ecEsc(s.name)+'</div><button class="spdel" onclick="event.stopPropagation();delSp(\''+s.id+'\')">&#x2715;</button></div>';}).join('')
+      +'<label class="spi spadd" style="cursor:pointer"><input type="file" accept="image/*" multiple style="display:none" onchange="pujarLogos(this)"><div style="font-size:1.6rem">+</div><div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em">Pujar logos</div></label>';
   });
 }
-function openSM(){['sm-id','sm-n','sm-i','sm-w'].forEach(function(x){document.getElementById(x).value='';});oM('mo-sp');}
+function spPrev(){var v=document.getElementById('sm-i').value.trim(),p=document.getElementById('sm-prev');p.src=v;p.style.display=v?'block':'none';}
+function openSM(){['sm-id','sm-n','sm-i','sm-w'].forEach(function(x){document.getElementById(x).value='';});spPrev();oM('mo-sp');}
+function editSM(id){var s=SPS.filter(function(x){return x.id===id;})[0];if(!s)return;document.getElementById('sm-id').value=s.id;document.getElementById('sm-n').value=s.name;document.getElementById('sm-i').value=s.img;document.getElementById('sm-w').value=s.web;spPrev();oM('mo-sp');}
+// Puja diversos logos de cop i crea un patrocinador per cadascun (nom = nom de l'arxiu)
+function pujarLogos(input){
+  var files=Array.prototype.slice.call(input.files||[]);if(!files.length)return;
+  var done=0,chain=Promise.resolve();
+  toast('Pujant '+files.length+' logo(s)...');
+  files.forEach(function(file){
+    chain=chain.then(function(){return ECDB.upload(file);}).then(function(url){
+      var name=file.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+      return api('insert','patrocinadors',{name:name,img:url,web:''});
+    }).then(function(){done++;});
+  });
+  chain.then(function(){toast(done+' logo(s) pujats! Fes clic per editar el nom.');})
+    .catch(function(e){console.error(e);toast('Error pujant: '+(e.message||''),false);})
+    .then(function(){input.value='';loadSponsors();loadDash();});
+}
 function saveSp(){
   var n=document.getElementById('sm-n').value.trim();if(!n){toast('Introdueix el nom',false);return;}
   var id=document.getElementById('sm-id').value;
