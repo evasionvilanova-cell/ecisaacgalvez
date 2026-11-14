@@ -185,32 +185,31 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
   .g2,.g3{grid-template-columns:1fr}
 }
 </style>
+<style>
+#nav-ins:empty{display:none}
+.upl{display:inline-flex;align-items:center;gap:.4rem;margin-top:.4rem;font-size:.7rem;font-weight:700;color:#fc449d;cursor:pointer}
+.upl input{display:none}
+.st-Pendent{background:rgba(250,204,21,.18);color:#a16207}.st-Confirmada{background:rgba(34,197,94,.12);color:#15803d}.st-Baixa{background:rgba(239,68,68,.12);color:#b91c1c}
+.ins-sel{border:0;border-radius:20px;padding:3px 8px;font-size:.68rem;font-weight:700;cursor:pointer}
+.chk{display:flex;align-items:center;gap:.5rem;font-size:.8rem;margin:.35rem 0;cursor:pointer}.chk input{width:auto!important}
+.det{font-size:.8rem;line-height:1.7}.det b{color:#6b3a55;display:inline-block;min-width:150px}
+.mig{font-size:.78rem;color:#6b3a55;line-height:1.6}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/ecdb.js"></script>
 </head>
 <body>
 
 <!-- SETUP -->
-<div class="screen" id="s-cfg">
+<div class="screen hide" id="s-cfg">
   <div class="box">
-    <h2>Connecta Google Sheets</h2>
-    <p class="sub">Configura una sola vegada. Segueix els 4 passos.</p>
-    <div class="step">
-      <div class="stepn">Pas 1 — Crea el Google Sheet</div>
-      <p>Ves a <a href="https://sheets.google.com" target="_blank" style="color:#ff7ec3">sheets.google.com</a>, crea un full nou i posa-li el nom <code>ecisaacgalvez</code></p>
-    </div>
-    <div class="step">
-      <div class="stepn">Pas 2 — Apps Script</div>
-      <p>Al Sheet: <code>Extensions &rarr; Apps Script</code> &rarr; esborra tot &rarr; enganxa el fitxer <code>Code.gs</code> &rarr; guarda</p>
-    </div>
-    <div class="step">
-      <div class="stepn">Pas 3 — Desplega</div>
-      <p><code>Deploy &rarr; New deployment &rarr; Web App</code> &rarr; Execute as: <code>Me</code> &rarr; Access: <code>Anyone</code> &rarr; Deploy &rarr; autoritza &rarr; copia la URL</p>
-    </div>
-    <div class="step">
-      <div class="stepn">Pas 4 — Enganxa la URL</div>
-      <input class="inp" id="cfg-url" placeholder="https://script.google.com/macros/s/.../exec">
-    </div>
-    <button class="btnx" onclick="doSetup()">Connectar i continuar &rarr;</button>
-    <p class="errmsg" id="cfg-err">No s'ha pogut connectar. Comprova la URL i els permisos.</p>
+    <h2>Falta connectar Supabase</h2>
+    <p class="sub">El panell ja no fa servir Google Sheets. Configura-ho una sola vegada (detall al README.md):</p>
+    <div class="step"><div class="stepn">Pas 1</div><p>Crea un projecte gratuït a <a href="https://supabase.com" target="_blank" style="color:#ff7ec3">supabase.com</a></p></div>
+    <div class="step"><div class="stepn">Pas 2</div><p><code>SQL Editor</code> &rarr; enganxa <code>supabase.sql</code> (canvia el correu d'admin) &rarr; Run</p></div>
+    <div class="step"><div class="stepn">Pas 3</div><p><code>Authentication &rarr; Users &rarr; Add user</code> amb aquell correu</p></div>
+    <div class="step"><div class="stepn">Pas 4</div><p>Copia <code>Project URL</code> i <code>anon key</code> a <code>js/config.js</code> al GitHub</p></div>
   </div>
 </div>
 
@@ -220,14 +219,13 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
     <h2 style="margin-bottom:.3rem">Eci<span style="color:#ff7ec3">Isaac</span>Galvez</h2>
     <p class="sub" style="margin-bottom:1rem">Panel d'administracio</p>
     <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:20px;padding:.25rem .9rem;font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem">
-      <div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div> Google Sheets connectat
+      <div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div> Accés segur
     </div>
     <br>
-    <input class="inp" type="text" id="l-u" placeholder="Usuari" style="margin-bottom:.5rem">
-    <input class="inp" type="password" id="l-p" placeholder="Contrasenya">
+    <input class="inp" type="email" id="l-u" placeholder="Correu electrònic" autocomplete="username" style="margin-bottom:.5rem">
+    <input class="inp" type="password" id="l-p" placeholder="Contrasenya" autocomplete="current-password">
     <button class="btnx" onclick="doLogin()">Entrar</button>
-    <p class="errmsg" id="l-err">Usuari o contrasenya incorrectes</p>
-    <p style="margin-top:1rem;font-size:.6rem;color:rgba(255,255,255,0.18)">admin / ecisaac2025</p>
+    <p class="errmsg" id="l-err">Correu o contrasenya incorrectes</p>
   </div>
 </div>
 
@@ -237,13 +235,15 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
     <div class="sb-logo">
       <div class="nm">Eci<em>Isaac</em>Galvez</div>
       <small>Panel Admin</small>
-      <div class="sb-conn"><div class="cdot"></div><span class="clbl">Google Sheets actiu</span></div>
+      <div class="sb-conn"><div class="cdot"></div><span class="clbl">Supabase actiu</span></div>
     </div>
     <nav class="nav">
       <div class="ns">General</div>
       <div class="ni on" onclick="showP('dashboard')"><span>&#x1F4CA;</span> Resum</div>
+      <div class="ni" onclick="showP('inscripcions')"><span>&#x1F4CB;</span> Inscripcions <span class="badge bpk" id="nav-ins" style="margin-left:auto"></span></div>
       <div class="ns">Contingut</div>
       <div class="ni" onclick="showP('home')"><span>&#x1F3E0;</span> Pagina inici</div>
+      <div class="ni" onclick="showP('noticies')"><span>&#x1F4E3;</span> Notícies / avisos</div>
       <div class="ni" onclick="showP('patrocinadors')"><span>&#x1F3F7;&#xFE0F;</span> Patrocinadors</div>
       <div class="ni" onclick="showP('corredors')"><span>&#x1F6B4;</span> Corredors</div>
       <div class="ns">Competicions</div>
@@ -269,6 +269,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
       <!-- DASHBOARD -->
       <div class="panel on" id="p-dashboard">
         <div class="g3 mb">
+          <div class="sc" style="cursor:pointer" onclick="showP('inscripcions')"><div class="sic">&#x1F4CB;</div><div><div class="sn" id="d-i">0</div><div class="sl">Inscripcions pendents</div></div></div>
           <div class="sc"><div class="sic">&#x1F6B4;</div><div><div class="sn" id="d-r">0</div><div class="sl">Corredors</div></div></div>
           <div class="sc"><div class="sic">&#x1F3F7;&#xFE0F;</div><div><div class="sn" id="d-s">0</div><div class="sl">Patrocinadors</div></div></div>
           <div class="sc"><div class="sic">&#x1F3C6;</div><div><div class="sn" id="d-c">0</div><div class="sl">Competicions</div></div></div>
@@ -281,12 +282,18 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
               <button class="btn bs" onclick="showP('patrocinadors');openSM()">+ Patrocinador</button>
               <button class="btn bs" onclick="showP('competicions');openCM()">+ Competicio</button>
               <button class="btn bs" onclick="showP('carreres');openRaceM()">+ Cursa propia</button>
+              <button class="btn bs" onclick="showP('noticies');openNM()">+ Notícia / avís</button>
             </div>
           </div>
           <div class="card">
             <div class="ch"><h3>Proximes competicions</h3></div>
             <div class="cb" id="d-comps"><div class="ld"><div class="spin"></div> Carregant...</div></div>
           </div>
+        </div>
+        <div class="card" style="margin-top:1.2rem">
+          <div class="ch"><h3>Importar dades de l'antic Google Sheets</h3></div>
+          <div class="cb mig">Copia una sola vegada corredors, patrocinadors, competicions, carreres i textos de l'antiga web (Google Sheets) a la nova base de dades. Només s'importen les taules que encara estiguin buides, així que no es duplica res.<br><br>
+            <button class="btn bp" id="mig-btn" onclick="migrar()">&#x21E9; Importar ara</button> <span id="mig-log"></span></div>
         </div>
       </div>
 
@@ -379,6 +386,26 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
             <div class="ld"><div class="spin"></div> Carregant...</div>
           </div>
         </div>
+      </div>
+
+      <!-- INSCRIPCIONS -->
+      <div class="panel" id="p-inscripcions">
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center">
+          <input class="inp" id="ins-q" placeholder="&#x1F50D; Cercar nom, tutor, telèfon..." oninput="renderIns()" style="max-width:300px;margin:0;background:#fff;color:#1a0a12;border-color:rgba(252,68,157,.25)">
+          <select id="ins-f" onchange="renderIns()" style="padding:.6rem;border-radius:10px;border:1.5px solid rgba(252,68,157,.25)"><option value="">Tots els estats</option><option>Pendent</option><option>Confirmada</option><option>Baixa</option></select>
+          <div style="flex:1"></div>
+          <button class="btn bs" onclick="exportIns()">&#x2B07; Exportar Excel (CSV)</button>
+        </div>
+        <div class="card"><div class="cb" id="ins-wrap" style="overflow-x:auto"><div class="ld"><div class="spin"></div></div></div></div>
+      </div>
+
+      <!-- NOTICIES -->
+      <div class="panel" id="p-noticies">
+        <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center">
+          <p class="mig" style="margin:0;max-width:640px">Les notícies surten a la portada. Marca'n una com a <b>Banner</b> (franja rosa a dalt de totes les pàgines) o <b>Pop-up</b> (finestra en entrar a la web). Només n'hi pot haver una de cada.</p>
+          <button class="btn bp" onclick="openNM()">+ Nova notícia</button>
+        </div>
+        <div class="card"><div class="cb" id="news-wrap" style="overflow-x:auto"><div class="ld"><div class="spin"></div></div></div></div>
       </div>
 
       <!-- CARRERES -->
@@ -487,68 +514,204 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
   </div>
 </div>
 
+<div class="mo" id="mo-news">
+  <div class="mb2">
+    <button class="mc" onclick="cM('mo-news')">&#x2715;</button>
+    <div class="mt" id="nm-t">Nova notícia</div>
+    <input type="hidden" id="nm-id">
+    <div class="fg"><label>Títol *</label><input id="nm-ti" type="text"></div>
+    <div class="g2">
+      <div class="fg"><label>Data</label><input id="nm-d" type="date"></div>
+      <div class="fg"><label>Text del botó</label><input id="nm-bt" type="text" placeholder="Més informació"></div>
+    </div>
+    <div class="fg"><label>Resum (targeta i banner)</label><input id="nm-r" type="text"></div>
+    <div class="fg"><label>Text complet</label><textarea id="nm-tx" rows="5"></textarea></div>
+    <div class="fg"><label>Imatge (URL)</label><input id="nm-i" type="text" placeholder="https://..."></div>
+    <div class="fg"><label>Enllaç del botó</label><input id="nm-u" type="text" placeholder="#inscripcio, competicions.html o https://..."></div>
+    <label class="chk"><input type="checkbox" id="nm-a" checked> Publicada</label>
+    <label class="chk"><input type="checkbox" id="nm-b"> Mostrar com a <b>BANNER</b> a dalt de la web</label>
+    <label class="chk"><input type="checkbox" id="nm-p"> Mostrar com a <b>POP-UP</b> en entrar</label>
+    <div class="mf"><button class="btn bs" onclick="cM('mo-news')">Cancellar</button><button class="btn bp" onclick="saveNews()">Guardar</button></div>
+  </div>
+</div>
+
+<div class="mo" id="mo-ins">
+  <div class="mb2">
+    <button class="mc" onclick="cM('mo-ins')">&#x2715;</button>
+    <div class="mt">Fitxa d'inscripció</div>
+    <div class="det" id="ins-det"></div>
+    <div class="fg" style="margin-top:1rem"><label>Notes internes</label><textarea id="ins-notes" rows="3"></textarea></div>
+    <div class="mf"><button class="btn bd2" onclick="delIns()">&#x1F5D1; Esborrar</button><button class="btn bp" onclick="saveInsNotes()">Guardar notes</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast">&#x2713; <span id="tmsg">Guardat!</span></div>
 
 <script>
-var ADMIN_U='admin',ADMIN_P='ecisaac2025',API='';
+var API='supabase';
 
 window.onload=function(){
-  API='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';
-  localStorage.setItem('ecig_api', API);
-  document.getElementById('s-cfg').classList.add('hide');
-  document.getElementById('s-login').classList.remove('hide');
   document.getElementById('l-p').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  if(!ECDB.ready){document.getElementById('s-cfg').classList.remove('hide');return;}
+  ECDB.isAdmin().then(function(ok){
+    if(ok){openApp();}else{document.getElementById('s-login').classList.remove('hide');}
+  });
+  addUploaders();
 };
 
-function doSetup(){
-  var url=document.getElementById('cfg-url').value.trim();
-  var err=document.getElementById('cfg-err');
-  if(!url.includes('script.google.com')){err.textContent='La URL ha de ser de Google Apps Script';err.style.display='block';return;}
-  err.style.display='none';
-  fetch(url+'?action=getConfig').then(function(r){return r.json();}).then(function(){
-    localStorage.setItem('ecig_api',url);API=url;
-    document.getElementById('s-cfg').classList.add('hide');
-    document.getElementById('s-login').classList.remove('hide');
-  }).catch(function(){
-    err.textContent="No s'ha pogut connectar. Comprova la URL i que el desplegament tingui acces Anyone.";
+function openApp(){
+  document.getElementById('s-login').classList.add('hide');
+  document.getElementById('app').style.display='flex';
+  loadAll();
+}
+
+function doLogin(){
+  var u=document.getElementById('l-u').value.trim(),p=document.getElementById('l-p').value;
+  var err=document.getElementById('l-err');err.style.display='none';
+  ECDB.login(u,p).then(openApp).catch(function(e){
+    err.textContent=(e&&e.message&&e.message.indexOf('administrador')>-1)?e.message:'Correu o contrasenya incorrectes';
     err.style.display='block';
   });
 }
 
-function doLogin(){
-  var u=document.getElementById('l-u').value,p=document.getElementById('l-p').value;
-  if(u===ADMIN_U&&p===ADMIN_P){
-    document.getElementById('s-login').classList.add('hide');
-    document.getElementById('app').style.display='flex';
-    loadAll();
-  }else{document.getElementById('l-err').style.display='block';}
-}
-
 function doLogout(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('s-login').classList.remove('hide');
+  ECDB.logout().then(function(){
+    document.getElementById('app').style.display='none';
+    document.getElementById('s-login').classList.remove('hide');
+  });
 }
 
+// Mateixa interfície que abans, ara contra Supabase
 function api(action,table,data,id){
-  var url=API+'?action='+action+'&table='+table;
-  if(id) url+='&id='+encodeURIComponent(id);
-  // Afegir tots els camps de data com a params GET
-  if(data){
-    Object.keys(data).forEach(function(k){
-      if(k!=='id'||action==='update') url+='&'+encodeURIComponent(k)+'='+encodeURIComponent(data[k]||'');
-    });
-  }
-  return fetch(url).then(function(r){return r.json();});
+  if(action==='getAll')return ECDB.getAll(table);
+  if(action==='insert')return ECDB.insert(table,Object.assign({},data));
+  if(action==='update')return ECDB.update(table,id,data);
+  if(action==='delete')return ECDB.remove(table,id);
+  return Promise.reject(new Error('Acció desconeguda'));
 }
 function apiCfg(data){
-  if(data){
-    var url=API+'?action=setConfig';
-    Object.keys(data).forEach(function(k){
-      url+='&cfg_'+encodeURIComponent(k)+'='+encodeURIComponent(data[k]||'');
+  return data?ECDB.setConfig(data):ECDB.getConfig();
+}
+
+// Botó "Pujar imatge" al costat dels camps d'imatge
+function addUploaders(){
+  ['sm-i','rm-i','race-i','nm-i'].forEach(function(id){
+    var inp=document.getElementById(id);if(!inp)return;
+    var l=document.createElement('label');l.className='upl';
+    l.innerHTML='&#x1F4F7; Pujar imatge des de l\'ordinador / mòbil<input type="file" accept="image/*">';
+    l.querySelector('input').onchange=function(){
+      var file=this.files[0];if(!file)return;
+      toast('Pujant imatge...');
+      ECDB.upload(file).then(function(url){inp.value=url;toast('Imatge pujada!');}).catch(function(e){console.error(e);toast('Error pujant la imatge',false);});
+    };
+    inp.parentNode.appendChild(l);
+  });
+}
+
+// ---------- INSCRIPCIONS ----------
+var INS=[];
+function loadIns(){
+  return ECDB.getAll('inscripcions').then(function(d){
+    INS=d.slice().reverse();
+    var p=INS.filter(function(r){return r.estat==='Pendent';}).length;
+    document.getElementById('nav-ins').textContent=p||'';
+    var di=document.getElementById('d-i');if(di)di.textContent=p;
+    if(document.getElementById('p-inscripcions').classList.contains('on'))renderIns();
+  }).catch(function(e){console.error(e);});
+}
+function renderIns(){
+  var q=(document.getElementById('ins-q').value||'').toLowerCase(),f=document.getElementById('ins-f').value;
+  var l=INS.filter(function(r){return(!f||r.estat===f)&&(!q||JSON.stringify(r).toLowerCase().indexOf(q)>-1);});
+  var w=document.getElementById('ins-wrap');
+  if(!l.length){w.innerHTML='<div class="empty"><div class="ei">&#x1F4CB;</div><p>'+(INS.length?'Cap inscripció amb aquest filtre':'Encara no hi ha inscripcions')+'</p></div>';return;}
+  w.innerHTML='<table class="tbl"><thead><tr><th>Corredor/a</th><th>Categoria</th><th>Tutor/a</th><th>Rebuda</th><th>Estat</th><th></th></tr></thead><tbody>'+l.map(function(r){
+    return '<tr><td><b>'+ecEsc(r.nom)+' '+ecEsc(r.cognoms)+'</b>'+(r.salut?' <span title="Té observacions mèdiques">&#x2695;&#xFE0F;</span>':'')+'<br><span style="color:#6b3a55">'+fd(r.data_naixement)+'</span></td>'
+      +'<td>'+ecEsc(r.grup)+'</td>'
+      +'<td>'+ecEsc(r.tutor_nom)+'<br><a href="tel:'+ecEsc(r.tutor_telefon)+'">'+ecEsc(r.tutor_telefon)+'</a> &middot; <a href="mailto:'+ecEsc(r.tutor_email)+'">'+ecEsc(r.tutor_email)+'</a></td>'
+      +'<td style="white-space:nowrap">'+fd(String(r.created_at).slice(0,10))+'</td>'
+      +'<td><select class="ins-sel st-'+ecEsc(r.estat)+'" onchange="setEstat(\''+r.id+'\',this.value)">'+['Pendent','Confirmada','Baixa'].map(function(s){return'<option'+(s===r.estat?' selected':'')+'>'+s+'</option>';}).join('')+'</select></td>'
+      +'<td><button class="btn bs sm" onclick="openIns(\''+r.id+'\')">Fitxa</button></td></tr>';
+  }).join('')+'</tbody></table>';
+}
+function setEstat(id,v){ECDB.update('inscripcions',id,{estat:v}).then(function(){toast('Estat: '+v);loadIns();}).catch(function(){toast('Error',false);});}
+var INS_CUR=null;
+var INS_F=[['nom','Nom'],['cognoms','Cognoms'],['data_naixement','Data naixement'],['grup','Categoria'],['talla','Talla'],['llicencia','Llicència'],['salut','Observacions mèdiques'],['tutor_nom','Tutor/a'],['tutor_dni','DNI tutor/a'],['tutor_telefon','Telèfon'],['tutor_email','Correu'],['poblacio','Població'],['comentaris','Comentaris'],['consent_imatge','Autoritza imatges'],['estat','Estat'],['created_at','Rebuda']];
+function openIns(id){
+  var r=INS.filter(function(x){return x.id===id;})[0];if(!r)return;INS_CUR=r;
+  document.getElementById('ins-det').innerHTML=INS_F.map(function(f){var v=r[f[0]];if(typeof v==='boolean')v=v?'Sí':'No';return'<div><b>'+f[1]+'</b> '+ecEsc(v||'—')+'</div>';}).join('');
+  document.getElementById('ins-notes').value=r.notes_admin||'';
+  oM('mo-ins');
+}
+function saveInsNotes(){ECDB.update('inscripcions',INS_CUR.id,{notes_admin:document.getElementById('ins-notes').value}).then(function(){cM('mo-ins');toast('Guardat!');loadIns();});}
+function delIns(){if(!confirm('Esborrar aquesta inscripció? No es pot desfer.'))return;ECDB.remove('inscripcions',INS_CUR.id).then(function(){cM('mo-ins');toast('Esborrada');loadIns();});}
+function exportIns(){
+  var cell=function(v){return'"'+String(v==null?'':(typeof v==='boolean'?(v?'Sí':'No'):v)).replace(/"/g,'""')+'"';};
+  var csv='﻿'+INS_F.map(function(f){return cell(f[1]);}).join(';')+'\n'+INS.map(function(r){return INS_F.map(function(f){return cell(r[f[0]]);}).join(';');}).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='inscripcions-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+// ---------- NOTICIES ----------
+var NEWS=[];
+function loadNews(){
+  var w=document.getElementById('news-wrap');
+  ECDB.getAll('noticies').then(function(d){
+    NEWS=d.sort(function(a,b){return String(b.data).localeCompare(String(a.data));});
+    if(!NEWS.length){w.innerHTML='<div class="empty"><div class="ei">&#x1F4E3;</div><p>Encara no hi ha notícies</p></div>';return;}
+    w.innerHTML='<table class="tbl"><thead><tr><th>Data</th><th>Títol</th><th>Publicada</th><th>Banner</th><th>Pop-up</th><th></th></tr></thead><tbody>'+NEWS.map(function(n){
+      return '<tr><td style="white-space:nowrap">'+fd(n.data)+'</td><td><b>'+ecEsc(n.titol)+'</b><br><span style="color:#6b3a55">'+ecEsc(n.resum)+'</span></td>'
+        +'<td><button class="btn bs sm" onclick="togNews(\''+n.id+'\',\'activa\')">'+(n.activa?'&#x2705; Sí':'&#x26D4; No')+'</button></td>'
+        +'<td><button class="btn '+(n.banner?'bp':'bs')+' sm" onclick="togNews(\''+n.id+'\',\'banner\')">'+(n.banner?'Banner':'—')+'</button></td>'
+        +'<td><button class="btn '+(n.popup?'bp':'bs')+' sm" onclick="togNews(\''+n.id+'\',\'popup\')">'+(n.popup?'Pop-up':'—')+'</button></td>'
+        +'<td><div style="display:flex;gap:4px"><button class="btn bs sm" onclick="editNM(\''+n.id+'\')">&#x270F;&#xFE0F;</button><button class="btn bd2 sm" onclick="delNews(\''+n.id+'\')">&#x1F5D1;</button></div></td></tr>';
+    }).join('')+'</tbody></table>';
+  }).catch(function(e){console.error(e);w.innerHTML='<div class="empty"><p>Error carregant</p></div>';});
+}
+var NM=[['nm-ti','titol'],['nm-d','data'],['nm-bt','boto'],['nm-r','resum'],['nm-tx','text'],['nm-i','imatge'],['nm-u','enllac']];
+function openNM(){document.getElementById('nm-id').value='';NM.forEach(function(x){document.getElementById(x[0]).value='';});document.getElementById('nm-d').value=new Date().toISOString().slice(0,10);document.getElementById('nm-a').checked=true;document.getElementById('nm-b').checked=false;document.getElementById('nm-p').checked=false;document.getElementById('nm-t').textContent='Nova notícia';oM('mo-news');}
+function editNM(id){var n=NEWS.filter(function(x){return x.id===id;})[0];if(!n)return;document.getElementById('nm-id').value=n.id;NM.forEach(function(x){document.getElementById(x[0]).value=n[x[1]]||'';});document.getElementById('nm-a').checked=!!n.activa;document.getElementById('nm-b').checked=!!n.banner;document.getElementById('nm-p').checked=!!n.popup;document.getElementById('nm-t').textContent='Editar notícia';oM('mo-news');}
+// Només una notícia amb banner i una amb pop-up
+function clearFlags(row,id){
+  var ps=[];['banner','popup'].forEach(function(k){if(row[k])NEWS.forEach(function(n){if(n[k]&&n.id!==id){var o={};o[k]=false;ps.push(ECDB.update('noticies',n.id,o));}});});
+  return Promise.all(ps);
+}
+function saveNews(){
+  var id=document.getElementById('nm-id').value,b={};
+  NM.forEach(function(x){b[x[1]]=document.getElementById(x[0]).value.trim();});
+  if(!b.titol){toast('Introdueix el títol',false);return;}
+  if(!b.data)b.data=new Date().toISOString().slice(0,10);
+  b.activa=document.getElementById('nm-a').checked;b.banner=document.getElementById('nm-b').checked;b.popup=document.getElementById('nm-p').checked;
+  clearFlags(b,id).then(function(){return id?ECDB.update('noticies',id,b):ECDB.insert('noticies',b);})
+    .then(function(){cM('mo-news');toast('Notícia guardada!');loadNews();}).catch(function(e){console.error(e);toast('Error',false);});
+}
+function togNews(id,k){
+  var n=NEWS.filter(function(x){return x.id===id;})[0];var o={};o[k]=!n[k];
+  (k!=='activa'?clearFlags(o,id):Promise.resolve()).then(function(){return ECDB.update('noticies',id,o);}).then(loadNews);
+}
+function delNews(id){if(!confirm('Eliminar la notícia?'))return;ECDB.remove('noticies',id).then(function(){toast('Eliminada');loadNews();});}
+
+// ---------- IMPORTAR DES DE GOOGLE SHEETS ----------
+function migrar(){
+  var log=document.getElementById('mig-log'),btn=document.getElementById('mig-btn');
+  if(!confirm("Importar les dades de l'antic Google Sheets?"))return;
+  btn.disabled=true;log.textContent='Important...';
+  var fields={corredors:['name','cat','img','num','notes'],patrocinadors:['name','img','web'],competicions:['name','date','place','cat','status','url','notes'],carreres:['name','date','edition','description','img','url']};
+  var res=[],chain=Promise.resolve();
+  Object.keys(fields).forEach(function(t){
+    chain=chain.then(function(){return ECDB.getAll(t);}).then(function(cur){
+      if(cur.length){res.push(t+': ja tenia dades, s\'omet');return;}
+      return ECDB.sheets('action=getAll&table='+t).then(function(rows){
+        rows=(rows||[]).map(function(r){var o={};fields[t].forEach(function(k){o[k]=r[k]==null?'':String(r[k]);});if(o.date&&o.date.indexOf('T')>-1)o.date=o.date.split('T')[0];return o;}).filter(function(o){return o.name;});
+        if(!rows.length){res.push(t+': 0');return;}
+        return ECDB.client.from(t).insert(rows).then(function(r){if(r.error)throw r.error;res.push(t+': '+rows.length);});
+      });
     });
-    return fetch(url).then(function(r){return r.json();});
-  }
-  return fetch(API+'?action=getConfig').then(function(r){return r.json();});
+  });
+  chain.then(function(){return ECDB.getConfig();}).then(function(cfg){
+    if(Object.keys(cfg).length){res.push('textos: ja n\'hi havia');return;}
+    return ECDB.sheets('action=getConfig').then(function(c){if(c&&Object.keys(c).length){res.push('textos: '+Object.keys(c).length);return ECDB.setConfig(c);}});
+  }).then(function(){log.textContent='Fet! '+res.join(' · ');toast('Importació feta!');loadAll();})
+  .catch(function(e){console.error(e);log.textContent='Error: '+(e.message||e)+' · '+res.join(' · ');toast('Error important',false);})
+  .then(function(){btn.disabled=false;});
 }
 
 function toast(msg,ok){
@@ -559,7 +722,7 @@ function toast(msg,ok){
   t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);
 }
 
-var PT={dashboard:'Resum general',home:"Pagina d'inici",patrocinadors:'Patrocinadors',corredors:'Corredors',competicions:'Competicions',carreres:'Carreres propies'};
+var PT={inscripcions:'Inscripcions',noticies:'Notícies i avisos',dashboard:'Resum general',home:"Pagina d'inici",patrocinadors:'Patrocinadors',corredors:'Corredors',competicions:'Competicions',carreres:'Carreres propies'};
 function showP(id){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('on');});
@@ -567,6 +730,8 @@ function showP(id){
   document.querySelectorAll('.ni').forEach(function(n){if(n.getAttribute('onclick')&&n.getAttribute('onclick').indexOf("'"+id+"'")>=0)n.classList.add('on');});
   document.getElementById('ptitle').textContent=PT[id]||id;
   if(id==='dashboard')loadDash();
+  if(id==='inscripcions')loadIns().then(renderIns);
+  if(id==='noticies')loadNews();
   if(id==='corredors')loadRiders();
   if(id==='patrocinadors')loadSponsors();
   if(id==='competicions')loadComps();
@@ -582,7 +747,7 @@ function oM(id){document.getElementById(id).classList.add('open');}
 function cM(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
-function loadAll(){loadDash();loadConfig();}
+function loadAll(){loadDash();loadConfig();loadIns();}
 
 var CM=[['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb']];
 

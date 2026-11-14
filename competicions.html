@@ -67,6 +67,10 @@ footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90de
 @media(max-width:900px){.stats-row{grid-template-columns:1fr 1fr}.comp-body{flex-direction:column;align-items:flex-start;gap:.75rem}.nav-links{display:none}nav{padding:.9rem 1.2rem}section{padding:3.5rem 1.2rem}}
 @media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr}.comp-item{flex-direction:column}.comp-date-block{flex-direction:row;gap:.5rem;min-width:unset;padding:.6rem 1rem}}
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/ecdb.js"></script>
+  <script src="js/web.js"></script>
 </head>
 <body>
 <nav>
@@ -184,9 +188,8 @@ function updateStats(data){
 }
 
 window.onload=function(){
-  var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
-  fetch(api+'?action=getAll&table=competicions')
-    .then(function(r){return r.json();})
+  var api=1;
+  ECDB.getAll('competicions')
     .then(function(d){
       allComps=d||[];
       updateStats(allComps);

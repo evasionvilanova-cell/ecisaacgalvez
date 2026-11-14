@@ -314,7 +314,7 @@
       letter-spacing: 0.1em; text-transform: uppercase;
       color: rgba(255,255,255,0.5); margin-bottom: 0.4rem;
     }
-    .form-group input, .form-group select {
+    .form-group input, .form-group select, .form-group textarea {
       width: 100%;
       background: rgba(255,255,255,0.08);
       border: 1.5px solid rgba(255,255,255,0.15);
@@ -322,7 +322,7 @@
       font-family: 'Montserrat', sans-serif; font-size: 0.9rem;
       padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s;
     }
-    .form-group input::placeholder { color: rgba(255,255,255,0.3); }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
     .form-group input:focus, .form-group select:focus { border-color: var(--pink); }
     .form-group select option { background: #2d0a1e; color: white; }
 
@@ -433,7 +433,27 @@
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu a:hover { color: #ff7ec3; }
     @media(min-width:901px) { .mobile-menu { display: none !important; } }
+
+    /* Formulari d'inscripció */
+    .fc-step { color: var(--pink-light); font-weight: 800; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; margin: .4rem 0 .9rem; }
+    .fc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; margin-bottom: .6rem; }
+    .fc-grid .form-group { margin-bottom: .9rem; }
+    .fc-full { grid-column: 1 / -1; }
+    .form-card textarea { width: 100%; font-family: inherit; resize: vertical; }
+    .form-card .bad { border-color: #ff5a5a !important; box-shadow: 0 0 0 2px rgba(255,90,90,.25); }
+    .fc-check { display: flex !important; gap: .6rem; align-items: flex-start; font-size: .8rem !important; color: rgba(255,255,255,.75) !important; text-transform: none !important; letter-spacing: 0 !important; font-weight: 500 !important; margin: .6rem 0; cursor: pointer; line-height: 1.45; }
+    .fc-check input { width: auto !important; margin-top: .2rem; accent-color: var(--pink); }
+    .fc-err { color: #ffb3b3 !important; font-size: .85rem !important; min-height: 1em; margin: .4rem 0 .8rem !important; }
+    .fc-ok { text-align: center; padding: 2rem 1rem; color: #fff; }
+    .fc-ok .big { font-size: 3rem; }
+    .fc-ok h3 { font-size: 1.6rem; margin: .5rem 0; }
+    #noticies { background: var(--off-white); text-align: center; }
+    @media (max-width: 600px) { .fc-grid { grid-template-columns: 1fr; } }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/ecdb.js"></script>
+  <script src="js/web.js"></script>
 </head>
 <body>
 
@@ -467,12 +487,12 @@
   <section class="hero" id="inici">
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="hero-tag">Vilanova i la Geltrú · Ciclisme</div>
-        <h1>Ciclisme<span class="accent">per a joves</span></h1>
-        <p class="hero-sub">Entrenaments i competicions per a nens i nenes de 6 a 14 anys al circuit de Vilanova i la Geltrú.</p>
+        <div class="hero-tag" data-cfg="hero_tag">Vilanova i la Geltrú · Ciclisme</div>
+        <h1><span data-cfg="hero_title">Ciclisme</span><span class="accent" data-cfg="hero_subtitle">per a joves</span></h1>
+        <p class="hero-sub" data-cfg="hero_desc">Entrenaments i competicions per a nens i nenes de 6 a 14 anys al circuit de Vilanova i la Geltrú.</p>
         <div class="hero-btns">
-          <a href="#inscripcio" class="btn btn-primary">Inscriu-te ara</a>
-          <a href="#nosaltres" class="btn btn-ghost">Coneix l'escola</a>
+          <a href="#inscripcio" class="btn btn-primary" data-cfg="hero_btn1">Inscriu-te ara</a>
+          <a href="#nosaltres" class="btn btn-ghost" data-cfg="hero_btn2">Coneix l'escola</a>
         </div>
       </div>
       <div class="hero-img-wrap">
@@ -486,8 +506,8 @@
 
   <!-- STATS -->
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num">6–14</div><div class="stat-label">Anys d'edat</div></div>
-    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Categories</div></div>
+    <div class="stat"><div class="stat-num" data-cfg="stat1_num">6–14</div><div class="stat-label" data-cfg="stat1_label">Anys d'edat</div></div>
+    <div class="stat"><div class="stat-num" data-cfg="stat2_num">3</div><div class="stat-label" data-cfg="stat2_label">Categories</div></div>
     <div class="stat"><div class="stat-num">+50</div><div class="stat-label">Ciclistes</div></div>
     <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Passió pel ciclisme</div></div>
   </div>
@@ -496,10 +516,10 @@
   <section id="nosaltres">
     <div class="nosaltres-text reveal">
       <div class="section-tag">Qui som</div>
-      <h2>Una escola nova,<br>una passió antiga</h2>
-      <p>Som una nova escola de ciclisme que aposta pels més joves, començant amb l'extraescolar per als més petits on els ensenyem tot el que cal per anar en bici.</p>
-      <p>Per als més grans tenim els entrenaments conjunts al circuit tancat de Vilanova i la Geltrú, on els nostres tècnics preparen els millors entrenaments per als nens i nenes. Podran tenir l'equipació del club i la llicència federativa per competir en el calendari Català.</p>
-      <p>L'equip Cadet és per a aquells que, a partir dels 15 anys, vulguin seguir competint en curses del calendari Català i fora de Catalunya.</p>
+      <h2 data-cfg="nos_title">Una escola nova, una passió antiga</h2>
+      <p data-cfg="nos_p1">Som una nova escola de ciclisme que aposta pels més joves, començant amb l'extraescolar per als més petits on els ensenyem tot el que cal per anar en bici.</p>
+      <p data-cfg="nos_p2">Per als més grans tenim els entrenaments conjunts al circuit tancat de Vilanova i la Geltrú, on els nostres tècnics preparen els millors entrenaments per als nens i nenes. Podran tenir l'equipació del club i la llicència federativa per competir en el calendari Català.</p>
+      <p data-cfg="nos_p3">L'equip Cadet és per a aquells que, a partir dels 15 anys, vulguin seguir competint en curses del calendari Català i fora de Catalunya.</p>
       <br/>
       <a href="#inscripcio" class="btn btn-primary">Uneix-te ara</a>
     </div>
@@ -557,30 +577,48 @@
         <p>Omple el formulari i ens posarem en contacte amb tu per explicar-te tots els detalls, horaris i preus. No cal experiència prèvia!</p>
       </div>
       <div class="form-card reveal">
-        <div class="form-group">
-          <label>Nom complet</label>
-          <input type="text" placeholder="Ex: Marc García" />
-        </div>
-        <div class="form-group">
-          <label>Correu electrònic</label>
-          <input type="email" placeholder="correu@exemple.com" />
-        </div>
-        <div class="form-group">
-          <label>Telèfon</label>
-          <input type="tel" placeholder="+34 600 000 000" />
-        </div>
-        <div class="form-group">
-          <label>Categoria d'interès</label>
-          <select>
-            <option value="">— Selecciona una categoria —</option>
-            <option>Ciclisme Base (extraescolar)</option>
-            <option>Infantils (6–14 anys)</option>
-            <option>Cadets (+15 anys)</option>
-          </select>
-        </div>
-        <button class="btn btn-form" onclick="handleSubmit()">Enviar inscripció →</button>
+        <form id="ins-form" novalidate>
+          <div class="fc-step">1 · Corredor/a</div>
+          <div class="fc-grid">
+            <div class="form-group"><label>Nom *</label><input name="nom" required></div>
+            <div class="form-group"><label>Cognoms *</label><input name="cognoms" required></div>
+            <div class="form-group"><label>Data de naixement *</label><input type="date" name="data_naixement" required></div>
+            <div class="form-group"><label>Categoria d'interès *</label>
+              <select name="grup" required>
+                <option value="">— Selecciona —</option>
+                <option>Ciclisme Base (extraescolar)</option>
+                <option>Infantils (6–14 anys)</option>
+                <option>Cadets (+15 anys)</option>
+              </select></div>
+            <div class="form-group"><label>Talla de roba</label>
+              <select name="talla"><option value="">—</option><option>6</option><option>8</option><option>10</option><option>12</option><option>14</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
+            <div class="form-group"><label>Té llicència federativa?</label>
+              <select name="llicencia"><option>No</option><option>Sí, amb aquest club</option><option>Sí, amb un altre club</option></select></div>
+            <div class="form-group fc-full"><label>Al·lèrgies o observacions mèdiques</label><textarea name="salut" rows="2" placeholder="Si no n'hi ha, deixa-ho en blanc"></textarea></div>
+          </div>
+          <div class="fc-step">2 · Pare, mare o tutor/a</div>
+          <div class="fc-grid">
+            <div class="form-group fc-full"><label>Nom i cognoms *</label><input name="tutor_nom" required></div>
+            <div class="form-group"><label>Telèfon *</label><input type="tel" name="tutor_telefon" required placeholder="600 000 000"></div>
+            <div class="form-group"><label>Correu electrònic *</label><input type="email" name="tutor_email" required placeholder="correu@exemple.com"></div>
+            <div class="form-group"><label>DNI / NIE</label><input name="tutor_dni"></div>
+            <div class="form-group"><label>Població</label><input name="poblacio" value="Vilanova i la Geltrú"></div>
+            <div class="form-group fc-full"><label>Comentaris</label><textarea name="comentaris" rows="2" placeholder="Experiència, dubtes, horaris..."></textarea></div>
+          </div>
+          <label class="fc-check"><input type="checkbox" name="consent_imatge"> Autoritzo l'ús d'imatges del corredor/a a la web i xarxes del club.</label>
+          <label class="fc-check"><input type="checkbox" name="consent_rgpd" required> Accepto que l'Escola de Ciclisme Isaac Gálvez tracti aquestes dades per gestionar la inscripció. *</label>
+          <p class="fc-err" id="ins-err"></p>
+          <button class="btn btn-form" type="submit" id="ins-btn">Enviar inscripció →</button>
+        </form>
       </div>
     </div>
+  </section>
+
+  <!-- NOTÍCIES (es carreguen des del panell admin) -->
+  <section id="noticies">
+    <div class="section-tag">Actualitat</div>
+    <h2>Notícies del club</h2>
+    <div class="ec-news" id="noticies-list"></div>
   </section>
 
   <!-- GALERIA -->
@@ -628,7 +666,7 @@
       <li><a href="#inici">Inici</a></li>
       <li><a href="escola.html">Escola</a></li>
       <li><a href="competicions.html">Competicions</a></li><li><a href="carreres.html">Carreres</a></li>
-      <li><a href="galeria.html">Galeria</a></li>
+      <li><a href="index.html#galeria">Galeria</a></li>
       <li><a href="#inscripcio">Inscriu-te</a></li>
     </ul>
     <p class="footer-copy">© 2025 Escola de Ciclisme Ecisaacgalvez · Vilanova i la Geltrú</p>
@@ -643,22 +681,38 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => obs.observe(el));
 
-    function handleSubmit() {
-      const inputs = document.querySelectorAll('#inscripcio input, #inscripcio select');
-      let ok = true;
-      inputs.forEach(i => { if (!i.value.trim()) ok = false; });
-      if (!ok) { alert('Si us plau, omple tots els camps.'); return; }
-      alert('✓ Inscripció rebuda! Ens posarem en contacte aviat. Gràcies!');
-      inputs.forEach(i => i.value = '');
-    }
+    // Inscripció real: es desa a la base de dades (taula inscripcions)
+    document.getElementById('ins-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = e.target, err = document.getElementById('ins-err'), btn = document.getElementById('ins-btn');
+      f.querySelectorAll('.bad').forEach(function (x) { x.classList.remove('bad'); });
+      var bad = Array.prototype.filter.call(f.querySelectorAll('[required]'), function (el) {
+        return el.type === 'checkbox' ? !el.checked : !el.value.trim();
+      });
+      if (f.tutor_email.value && !/^\S+@\S+\.\S+$/.test(f.tutor_email.value)) bad.push(f.tutor_email);
+      if (bad.length) {
+        bad.forEach(function (x) { (x.type === 'checkbox' ? x.parentNode : x).classList.add('bad'); });
+        err.textContent = 'Revisa els camps obligatoris (*).'; bad[0].focus(); return;
+      }
+      var d = {};
+      new FormData(f).forEach(function (v, k) { d[k] = String(v).trim(); });
+      d.consent_imatge = !!d.consent_imatge; d.consent_rgpd = true; d.estat = 'Pendent';
+      btn.disabled = true; btn.textContent = 'Enviant...'; err.textContent = '';
+      ECDB.addInscripcio(d).then(function () {
+        f.parentNode.innerHTML = '<div class="fc-ok"><div class="big">&#x1F6B4;</div><h3>Inscripció rebuda!</h3><p>Gràcies, ' + ecEsc(d.tutor_nom) + '. Hem rebut la inscripció de <b>' + ecEsc(d.nom) + '</b> i et contactarem a ' + ecEsc(d.tutor_email) + '.</p></div>';
+      }).catch(function (ex) {
+        console.error(ex);
+        err.textContent = "No s'ha pogut enviar. Torna-ho a provar o escriu-nos a ecisaacgalvez@gmail.com";
+        btn.disabled = false; btn.textContent = 'Enviar inscripció →';
+      });
+    });
   </script>
 
   <script>
     (function(){
-      var api='https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec';localStorage.setItem('ecig_api',api);
+      var api=1;
       if(!api) return;
-      fetch(api+'?action=getAll&table=patrocinadors')
-        .then(function(r){return r.json();})
+      ECDB.getAll('patrocinadors')
         .then(function(data){
           if(!data||!data.length) return;
           var track = document.getElementById('sponsor-track');
@@ -669,8 +723,7 @@
           track.innerHTML = items + items;
         }).catch(function(){});
       // Títol banner
-      fetch(api+'?action=getConfig')
-        .then(function(r){return r.json();})
+      ECDB.getConfig()
         .then(function(cfg){
           if(cfg.banner_title) document.getElementById('banner-title-text').textContent = cfg.banner_title;
         }).catch(function(){});
