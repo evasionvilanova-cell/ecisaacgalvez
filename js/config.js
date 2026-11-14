@@ -12,6 +12,9 @@ window.EC_CONFIG = {
   SUPABASE_URL: "",
   SUPABASE_ANON_KEY: "",
 
+  // Correu de l'únic administrador. Al panell només caldrà posar la contrasenya.
+  ADMIN_EMAIL: "ecisaacgalvez@gmail.com",
+
   // Antic backend (Google Sheets). Només s'usa per llegir mentre no hi ha
   // Supabase, i des del panell admin per importar les dades un sol cop.
   SHEETS_API: "https://script.google.com/macros/s/AKfycbxdOQBd700M-mx_soIeivMKOKp8PKespkl6A0JH0e2KyoATsPp-gFcF3RNnnJu_m8o7/exec"

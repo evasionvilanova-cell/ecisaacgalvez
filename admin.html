@@ -552,6 +552,7 @@ var API='supabase';
 
 window.onload=function(){
   document.getElementById('l-p').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  if(EC_CONFIG.ADMIN_EMAIL)document.getElementById('l-u').style.display='none';
   if(!ECDB.ready){document.getElementById('s-cfg').classList.remove('hide');return;}
   ECDB.isAdmin().then(function(ok){
     if(ok){openApp();}else{document.getElementById('s-login').classList.remove('hide');}
@@ -566,10 +567,10 @@ function openApp(){
 }
 
 function doLogin(){
-  var u=document.getElementById('l-u').value.trim(),p=document.getElementById('l-p').value;
+  var u=(EC_CONFIG.ADMIN_EMAIL||document.getElementById('l-u').value).trim(),p=document.getElementById('l-p').value;
   var err=document.getElementById('l-err');err.style.display='none';
   ECDB.login(u,p).then(openApp).catch(function(e){
-    err.textContent=(e&&e.message&&e.message.indexOf('administrador')>-1)?e.message:'Correu o contrasenya incorrectes';
+    err.textContent=(e&&e.message&&e.message.indexOf('administrador')>-1)?e.message:'Contrasenya incorrecta';
     err.style.display='block';
   });
 }

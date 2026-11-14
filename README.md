@@ -18,9 +18,9 @@ Web estàtica (HTML + JS) amb base de dades **Supabase**. Es publica sense compi
 
 1. Crea un projecte gratuït a [supabase.com](https://supabase.com) (regió: West EU).
 2. **SQL Editor** → enganxa tot `supabase.sql` → **canvia el correu** de la línia `insert into public.admins` pel de l'administrador → **Run**.
-3. **Authentication → Users → Add user** → crea l'usuari amb aquell correu i una contrasenya (marca *Auto confirm*).
-4. **Authentication → Sign In / Providers → Email** → desactiva *Allow new users to sign up*.
-5. **Project Settings → API** → copia `Project URL` i `anon public key` dins `js/config.js` (editant-lo a GitHub).
+3. **Authentication → Users → Add user** → posa el correu de l'administrador i la contrasenya del panell (marca *Auto confirm*). És l'única vegada: ningú més s'ha de registrar.
+4. **Authentication → Sign In / Providers → Email** → desactiva *Allow new users to sign up*, perquè ningú pugui crear-se un compte.
+5. **Project Settings → API** → copia `Project URL` i `anon public key` dins `js/config.js` (editant-lo a GitHub). Revisa que `ADMIN_EMAIL` sigui el mateix correu.
 6. Entra a `admin.html` → **Resum → Importar ara**: copia corredors, patrocinadors, competicions, carreres i textos de l'antic Google Sheets.
 
 Mentre `js/config.js` no tingui claus, la web pública continua llegint l'antic Google Sheets (només lectura) i el formulari d'inscripció avisa que s'escrigui per correu.
@@ -31,4 +31,4 @@ Mentre `js/config.js` no tingui claus, la web pública continua llegint l'antic 
 - **Notícies / avisos**: una notícia pot sortir com a **banner** (franja a dalt de totes les pàgines) o com a **pop-up** en entrar.
 - **Pàgina d'inici, Patrocinadors, Corredors, Competicions, Carreres pròpies**: com abans, i ara amb botó per pujar imatges.
 
-Per afegir un altre administrador: crea l'usuari (pas 3) i afegeix el seu correu a la taula `admins` (Table Editor).
+L'admin és només per a l'administrador: al panell només es demana la **contrasenya**. Les famílies no es registren: omplen el formulari d'inscripció i prou.
