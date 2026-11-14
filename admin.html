@@ -186,7 +186,25 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 }
 </style>
 <style>
-#nav-ins:empty,#nav-msg:empty{display:none}
+#nav-ins:empty,#nav-msg:empty,#nav-com:empty{display:none}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
+.pc{background:#fff;border:1px solid rgba(252,68,157,.15);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s;position:relative}
+.pc:hover{transform:translateY(-3px)}.pc.off{opacity:.45}
+.pc .pi{aspect-ratio:1;background:#fff5fb;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.pc .pi img{width:100%;height:100%;object-fit:contain;padding:.6rem}
+.pc .pb{padding:.7rem .9rem;font-size:.78rem}.pc .pb b{display:block;font-size:.88rem;margin:.15rem 0}
+.pc .pb small{color:#fc449d;font-weight:800;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase}
+.pc .flags{position:absolute;top:.5rem;left:.5rem;display:flex;gap:4px;flex-wrap:wrap}
+.pimgs{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0}
+.pimgs div{position:relative;width:74px;height:74px;border-radius:10px;background:#fff5fb;border:1px solid rgba(252,68,157,.2)}
+.pimgs img{width:100%;height:100%;object-fit:contain}
+.pimgs button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:0;background:#1a0a12;color:#fff;font-size:.6rem;cursor:pointer}
+.pimgs .first{position:absolute;bottom:2px;left:2px;font-size:.5rem;background:#fc449d;color:#fff;border-radius:6px;padding:1px 4px;font-weight:800}
+.tpre{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}.tpre button{font-size:.62rem;padding:3px 8px;border-radius:20px;border:1px solid rgba(252,68,157,.3);background:#fff;cursor:pointer;color:#6b3a55;font-weight:700}
+.com{background:#fff;border:1px solid rgba(252,68,157,.15);border-radius:14px;padding:1rem 1.2rem;margin-bottom:.8rem}
+.com.st-Nova{border-left:4px solid #fc449d}
+.com-h{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.8rem;align-items:flex-start}
+.com ul{margin:.6rem 0 .6rem 1.1rem;font-size:.82rem;line-height:1.6}
 .temes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem}
 .tm{border:2px solid rgba(252,68,157,.15);border-radius:14px;overflow:hidden;cursor:pointer;background:#fff;transition:border-color .2s}
 .tm.on{border-color:#fc449d;box-shadow:0 0 0 3px rgba(252,68,157,.15)}
@@ -264,6 +282,9 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
       <div class="ns">Competicions</div>
       <div class="ni" onclick="showP('competicions')"><span>&#x1F3C6;</span> Competicions</div>
       <div class="ni" onclick="showP('carreres')"><span>&#x1F6A9;</span> Carreres propies</div>
+      <div class="ns">Botiga</div>
+      <div class="ni" onclick="showP('cataleg')"><span>&#x1F455;</span> Catàleg</div>
+      <div class="ni" onclick="showP('comandes')"><span>&#x1F6D2;</span> Comandes <span class="badge bpk" id="nav-com" style="margin-left:auto"></span></div>
     </nav>
     <div class="sb-foot">
       <a href="index.html" target="_blank" class="wb">&#x1F310; Veure la web</a>
@@ -430,6 +451,31 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
         <div class="card"><div class="cb" id="ins-wrap" style="overflow-x:auto"><div class="ld"><div class="spin"></div></div></div></div>
       </div>
 
+      <!-- CATALEG -->
+      <div class="panel" id="p-cataleg">
+        <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem">
+          <p class="mig" style="margin:0;max-width:620px">Productes de la <b>Botiga</b>. Fes clic en un producte per editar-lo. Els desactivats no es veuen a la web.</p>
+          <div style="display:flex;gap:.5rem"><a class="btn bs" href="botiga.html" target="_blank">Veure botiga &#x2197;</a><button class="btn bp" onclick="openPM()">+ Nou producte</button></div>
+        </div>
+        <div class="card" style="margin-bottom:1rem"><div class="cb"><div id="pgrid" class="pgrid"><div class="ld"><div class="spin"></div></div></div></div></div>
+        <div class="card"><div class="ch"><h3>&#x1F4B3; Instruccions de pagament</h3></div><div class="cb">
+          <p class="mig" style="margin:0 0 .6rem">Es mostren al client quan fa la comanda (número de Bizum, IBAN, on recollir...).</p>
+          <textarea id="bt-pag" rows="4" style="width:100%;border:1.5px solid rgba(252,68,157,.2);border-radius:10px;padding:.7rem;font-family:inherit" placeholder="Bizum: 600 000 000 (indica el número de comanda)&#10;Transferència: ES00 0000 0000 0000 0000 0000&#10;Recollida al club els dimarts i dijous de 18 a 20 h"></textarea>
+          <button class="btn bp sm" style="margin-top:.6rem" onclick="savePag()">Guardar instruccions</button>
+        </div></div>
+      </div>
+
+      <!-- COMANDES -->
+      <div class="panel" id="p-comandes">
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center">
+          <select id="com-f" onchange="renderCom()" style="padding:.6rem;border-radius:10px;border:1.5px solid rgba(252,68,157,.25)"><option value="">Totes les comandes</option></select>
+          <div style="flex:1"></div>
+          <button class="btn bs" onclick="exportCom()">&#x2B07; Exportar Excel (CSV)</button>
+        </div>
+        <div class="stats" id="com-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-bottom:1rem"></div>
+        <div id="com-wrap"><div class="ld"><div class="spin"></div></div></div>
+      </div>
+
       <!-- MISSATGES -->
       <div class="panel" id="p-missatges">
         <p class="mig" style="margin-top:0">Missatges del formulari de <b>Contacte</b>. Prem <b>Respondre</b> per contestar des del teu correu.</p>
@@ -583,6 +629,32 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
   </div>
 </div>
 
+<div class="mo" id="mo-prod">
+  <div class="mb2" style="width:640px">
+    <button class="mc" onclick="cM('mo-prod')">&#x2715;</button>
+    <div class="mt" id="pm-t">Nou producte</div>
+    <input type="hidden" id="pm-id">
+    <div class="fg"><label>Nom *</label><input id="pm-n" type="text" placeholder="Ex: Maillot oficial 2027"></div>
+    <div class="g2">
+      <div class="fg"><label>Categoria</label><input id="pm-c" list="pm-cats" placeholder="Tria o escriu"><datalist id="pm-cats"><option>Equipacions</option><option>Maillots</option><option>Culots</option><option>Xandalls</option><option>Sudaderes</option><option>Motxilles</option><option>Complements</option></datalist></div>
+      <div class="fg"><label>Preu (€) *</label><input id="pm-p" type="number" step="0.01" min="0" placeholder="35.00"></div>
+    </div>
+    <div class="fg"><label>Talles (separades per comes)</label><input id="pm-t2" type="text" placeholder="XS, S, M, L, XL">
+      <div class="tpre"><button type="button" onclick="setT('4, 6, 8, 10, 12, 14')">Infantil 4–14</button><button type="button" onclick="setT('XS, S, M, L, XL, XXL')">Adult XS–XXL</button><button type="button" onclick="setT('4, 6, 8, 10, 12, 14, XS, S, M, L, XL, XXL')">Infantil + adult</button><button type="button" onclick="setT('')">Talla única</button></div></div>
+    <div class="fg"><label>Descripció</label><textarea id="pm-d" rows="3" placeholder="Teixit, detalls, temps d'entrega..."></textarea></div>
+    <div class="fg"><label>Fotos (la primera és la principal)</label>
+      <div class="pimgs" id="pm-imgs"></div>
+      <label class="upl">&#x1F4F7; Pujar fotos<input type="file" accept="image/*" multiple onchange="upProd(this)"></label></div>
+    <div class="g2">
+      <div><label class="chk"><input type="checkbox" id="pm-a" checked> Visible a la botiga</label>
+        <label class="chk"><input type="checkbox" id="pm-x"> Esgotat</label>
+        <label class="chk"><input type="checkbox" id="pm-dst"> Marcar com a novetat</label></div>
+      <div class="fg"><label>Ordre (més petit = primer)</label><input id="pm-o" type="number" value="0"></div>
+    </div>
+    <div class="mf"><button class="btn bd2" id="pm-del" onclick="delProd()">&#x1F5D1; Esborrar</button><div style="flex:1"></div><button class="btn bs" onclick="cM('mo-prod')">Cancel·lar</button><button class="btn bp" onclick="saveProd()">Guardar</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast">&#x2713; <span id="tmsg">Guardat!</span></div>
 
 <script>
@@ -707,6 +779,94 @@ function renderTemes(){
 }
 function pickTema(k){document.getElementById('h-tema').value=k;renderTemes();toast('Prem Guardar canvis per aplicar-lo a la web');}
 
+// ---------- BOTIGA: CATÀLEG ----------
+var PRODS=[],PIMGS=[];
+function eur(n){return Number(n||0).toLocaleString('ca-ES',{style:'currency',currency:'EUR'});}
+function loadProds(){
+  ECDB.getAll('productes').then(function(d){
+    PRODS=d.sort(function(a,b){return(+a.ordre||0)-(+b.ordre||0);});
+    var g=document.getElementById('pgrid');
+    g.innerHTML=PRODS.map(function(p){var im=String(p.imatges||'').split('\n')[0];
+      return '<div class="pc'+(p.actiu?'':' off')+'" onclick="editPM(\''+p.id+'\')"><div class="flags">'+(p.actiu?'':'<span class="badge bs2" style="background:#1a0a12;color:#fff">Ocult</span>')+(p.esgotat?'<span class="badge" style="background:#1a0a12;color:#fff">Esgotat</span>':'')+(p.destacat?'<span class="badge bpk">Novetat</span>':'')+'</div>'
+        +'<div class="pi">'+(im?'<img src="'+ecEsc(im)+'">':'&#x1F455;')+'</div><div class="pb"><small>'+ecEsc(p.categoria)+'</small><b>'+ecEsc(p.nom)+'</b>'+eur(p.preu)+'</div></div>';
+    }).join('')+'<div class="pc" onclick="openPM()" style="display:flex;align-items:center;justify-content:center;min-height:200px;border-style:dashed;color:#fc449d;font-weight:800;font-size:.8rem">+ Nou producte</div>';
+  }).catch(function(e){console.error(e);document.getElementById('pgrid').innerHTML='<div class="empty"><p>Error carregant. Has executat <b>supabase-botiga.sql</b>?</p></div>';});
+  apiCfg().then(function(c){document.getElementById('bt-pag').value=c.botiga_pagament||'';});
+}
+function savePag(){ECDB.setConfig({botiga_pagament:document.getElementById('bt-pag').value}).then(function(){toast('Guardat!');}).catch(function(){toast('Error',false);});}
+function setT(v){document.getElementById('pm-t2').value=v;}
+function drawPimgs(){
+  document.getElementById('pm-imgs').innerHTML=PIMGS.map(function(u,i){return '<div><img src="'+ecEsc(u)+'">'+(i?'':'<span class="first">PRINCIPAL</span>')+'<button type="button" onclick="PIMGS.splice('+i+',1);drawPimgs()">&#x2715;</button>'+(i?'<button type="button" style="left:-6px;right:auto;background:#fc449d" title="Fer principal" onclick="PIMGS.unshift(PIMGS.splice('+i+',1)[0]);drawPimgs()">&#x2605;</button>':'')+'</div>';}).join('');
+}
+function upProd(input){
+  var fs=Array.prototype.slice.call(input.files||[]),ch=Promise.resolve();if(!fs.length)return;
+  toast('Pujant '+fs.length+' foto(s)...');
+  fs.forEach(function(f){ch=ch.then(function(){return ECDB.upload(f);}).then(function(u){PIMGS.push(u);drawPimgs();});});
+  ch.then(function(){toast('Fotos pujades!');}).catch(function(e){console.error(e);toast('Error pujant',false);}).then(function(){input.value='';});
+}
+var PMF=[['pm-n','nom'],['pm-c','categoria'],['pm-p','preu'],['pm-t2','talles'],['pm-d','descripcio'],['pm-o','ordre']];
+function openPM(){document.getElementById('pm-id').value='';PMF.forEach(function(x){document.getElementById(x[0]).value='';});document.getElementById('pm-o').value='0';PIMGS=[];drawPimgs();
+  document.getElementById('pm-a').checked=true;document.getElementById('pm-x').checked=false;document.getElementById('pm-dst').checked=false;document.getElementById('pm-t').textContent='Nou producte';document.getElementById('pm-del').style.display='none';oM('mo-prod');}
+function editPM(id){var p=PRODS.filter(function(x){return x.id===id;})[0];if(!p)return;openPM();
+  document.getElementById('pm-id').value=p.id;PMF.forEach(function(x){document.getElementById(x[0]).value=p[x[1]];});
+  PIMGS=String(p.imatges||'').split('\n').filter(Boolean);drawPimgs();
+  document.getElementById('pm-a').checked=!!p.actiu;document.getElementById('pm-x').checked=!!p.esgotat;document.getElementById('pm-dst').checked=!!p.destacat;
+  document.getElementById('pm-t').textContent='Editar producte';document.getElementById('pm-del').style.display='';}
+function saveProd(){
+  var id=document.getElementById('pm-id').value,b={};
+  PMF.forEach(function(x){b[x[1]]=document.getElementById(x[0]).value.trim();});
+  if(!b.nom){toast('Introdueix el nom',false);return;}
+  b.preu=parseFloat(String(b.preu).replace(',','.'));if(isNaN(b.preu)){toast('Introdueix el preu',false);return;}
+  b.ordre=parseInt(b.ordre,10)||0;b.imatges=PIMGS.join('\n');
+  b.talles=b.talles.split(',').map(function(t){return t.trim();}).filter(Boolean).join(', ');
+  b.actiu=document.getElementById('pm-a').checked;b.esgotat=document.getElementById('pm-x').checked;b.destacat=document.getElementById('pm-dst').checked;
+  (id?ECDB.update('productes',id,b):ECDB.insert('productes',b)).then(function(){cM('mo-prod');toast('Producte guardat!');loadProds();}).catch(function(e){console.error(e);toast('Error: '+(e.message||''),false);});
+}
+function delProd(){var id=document.getElementById('pm-id').value;if(!id||!confirm('Esborrar aquest producte?'))return;ECDB.remove('productes',id).then(function(){cM('mo-prod');toast('Esborrat');loadProds();});}
+
+// ---------- BOTIGA: COMANDES ----------
+var COMS=[],CEST=['Nova','Confirmada','Pagada','Preparada','Lliurada','Cancel·lada'];
+function loadCom(){
+  return ECDB.getAll('comandes').then(function(d){
+    COMS=d.slice().reverse();
+    var n=COMS.filter(function(c){return c.estat==='Nova';}).length;document.getElementById('nav-com').textContent=n||'';
+    var sel=document.getElementById('com-f');if(sel.options.length<2)CEST.forEach(function(e){var o=document.createElement('option');o.textContent=e;sel.appendChild(o);});
+    if(document.getElementById('p-comandes').classList.contains('on'))renderCom();
+  }).catch(function(e){console.error(e);});
+}
+function renderCom(){
+  var f=document.getElementById('com-f').value,l=COMS.filter(function(c){return !f||c.estat===f;});
+  var act=COMS.filter(function(c){return c.estat!=='Cancel·lada';});
+  document.getElementById('com-stats').innerHTML='<div class="sc"><div><div class="sn">'+COMS.filter(function(c){return c.estat==='Nova';}).length+'</div><div class="sl">Noves</div></div></div>'
+    +'<div class="sc"><div><div class="sn">'+act.length+'</div><div class="sl">Comandes actives</div></div></div>'
+    +'<div class="sc"><div><div class="sn">'+eur(act.reduce(function(a,c){return a+(+c.total||0);},0))+'</div><div class="sl">Import total</div></div></div>'
+    +'<div class="sc"><div><div class="sn">'+eur(act.filter(function(c){return c.pagada;}).reduce(function(a,c){return a+(+c.total||0);},0))+'</div><div class="sl">Cobrat</div></div></div>';
+  var w=document.getElementById('com-wrap');
+  if(!l.length){w.innerHTML='<div class="card"><div class="cb"><div class="empty"><div class="ei">&#x1F6D2;</div><p>'+(COMS.length?'Cap comanda amb aquest filtre':'Encara no hi ha comandes')+'</p></div></div></div>';return;}
+  w.innerHTML=l.map(function(c){
+    var it=Array.isArray(c.items)?c.items:[];
+    return '<div class="com st-'+ecEsc(c.estat)+'"><div class="com-h"><div><b>'+ecEsc(c.nom)+'</b>'+(c.corredor?' &middot; corredor/a: '+ecEsc(c.corredor):'')+'<br><a href="tel:'+ecEsc(c.telefon)+'">'+ecEsc(c.telefon)+'</a> &middot; <a href="mailto:'+ecEsc(c.email)+'">'+ecEsc(c.email)+'</a><br><span style="color:#6b3a55">'+new Date(c.created_at).toLocaleString('ca-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' &middot; Pagament: '+ecEsc(c.pagament)+' &middot; Ref. '+String(c.id).slice(0,6).toUpperCase()+'</span></div>'
+      +'<div style="text-align:right"><div style="font-size:1.3rem;font-weight:900">'+eur(c.total)+'</div>'
+      +'<select class="ins-sel" style="background:#fff5fb" onchange="setCom(\''+c.id+'\',{estat:this.value})">'+CEST.map(function(e){return '<option'+(e===c.estat?' selected':'')+'>'+e+'</option>';}).join('')+'</select>'
+      +'<label class="chk" style="justify-content:flex-end"><input type="checkbox" '+(c.pagada?'checked':'')+' onchange="setCom(\''+c.id+'\',{pagada:this.checked})"> Pagada</label></div></div>'
+      +'<ul>'+it.map(function(i){return '<li>'+i.q+' &times; <b>'+ecEsc(i.nom)+'</b>'+(i.talla?' (talla '+ecEsc(i.talla)+')':'')+' &mdash; '+eur(i.preu*i.q)+'</li>';}).join('')+'</ul>'
+      +(c.notes?'<div style="font-size:.8rem;color:#6b3a55;margin-bottom:.5rem">&#x1F4AC; '+ecEsc(c.notes)+'</div>':'')
+      +'<div style="display:flex;gap:6px;flex-wrap:wrap"><a class="btn bp sm" href="mailto:'+ecEsc(c.email)+'?subject='+encodeURIComponent('Comanda '+String(c.id).slice(0,6).toUpperCase()+' - Escola de Ciclisme Isaac Gálvez')+'">&#x2709; Escriure</a>'
+      +'<button class="btn bs sm" onclick="noteCom(\''+c.id+'\')">&#x1F4DD; Nota interna'+(c.notes_admin?' ('+ecEsc(c.notes_admin.slice(0,30))+')':'')+'</button>'
+      +'<button class="btn bd2 sm" onclick="delCom(\''+c.id+'\')">&#x1F5D1;</button></div></div>';
+  }).join('');
+}
+function setCom(id,o){ECDB.update('comandes',id,o).then(function(){toast('Actualitzada');loadCom();}).catch(function(){toast('Error',false);});}
+function noteCom(id){var c=COMS.filter(function(x){return x.id===id;})[0];var n=prompt('Nota interna (només la veus tu):',c.notes_admin||'');if(n===null)return;setCom(id,{notes_admin:n});}
+function delCom(id){if(!confirm('Esborrar aquesta comanda?'))return;ECDB.remove('comandes',id).then(function(){toast('Esborrada');loadCom();});}
+function exportCom(){
+  var cell=function(v){return'"'+String(v==null?'':v).replace(/"/g,'""')+'"';};
+  var rows=[['Ref','Data','Estat','Pagada','Client','Telèfon','Correu','Corredor/a','Pagament','Producte','Talla','Quantitat','Preu','Subtotal','Total comanda','Comentaris']];
+  COMS.forEach(function(c){(c.items||[]).forEach(function(i){rows.push([String(c.id).slice(0,6).toUpperCase(),String(c.created_at).slice(0,10),c.estat,c.pagada?'Sí':'No',c.nom,c.telefon,c.email,c.corredor,c.pagament,i.nom,i.talla,i.q,i.preu,i.preu*i.q,c.total,c.notes]);});});
+  var csv='﻿'+rows.map(function(r){return r.map(cell).join(';');}).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='comandes-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
 // ---------- MISSATGES ----------
 var MSG=[];
 function loadMsg(){
@@ -802,7 +962,7 @@ function toast(msg,ok){
   t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);
 }
 
-var PT={missatges:'Missatges de contacte',inscripcions:'Inscripcions',noticies:'Notícies i avisos',dashboard:'Resum general',home:"Pagina d'inici",patrocinadors:'Patrocinadors',corredors:'Corredors',competicions:'Competicions',carreres:'Carreres propies'};
+var PT={cataleg:'Catàleg de la botiga',comandes:'Comandes de la botiga',missatges:'Missatges de contacte',inscripcions:'Inscripcions',noticies:'Notícies i avisos',dashboard:'Resum general',home:"Pagina d'inici",patrocinadors:'Patrocinadors',corredors:'Corredors',competicions:'Competicions',carreres:'Carreres propies'};
 function showP(id){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('on');});
@@ -814,6 +974,8 @@ function showP(id){
   if(id==='inscripcions')loadIns().then(renderIns);
   if(id==='noticies')loadNews();
   if(id==='missatges')loadMsg();
+  if(id==='cataleg')loadProds();
+  if(id==='comandes')loadCom();
   if(id==='corredors')loadRiders();
   if(id==='patrocinadors')loadSponsors();
   if(id==='competicions')loadComps();
@@ -829,7 +991,7 @@ function oM(id){document.getElementById(id).classList.add('open');}
 function cM(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
-function loadAll(){loadDash();loadConfig();loadIns();loadMsg();}
+function loadAll(){loadDash();loadConfig();loadIns();loadMsg();loadCom();}
 
 var CM=[['h-tema','tema'],['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb'],['h-wa','contact_wa'],['h-adr','contact_adreca'],['h-tt','social_tt'],['h-yt','social_yt'],['h-st','social_strava']];
 

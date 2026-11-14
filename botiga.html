@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Botiga · Ecisaacgalvez</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:#fff;color:#1a0a12;overflow-x:hidden}
+:root{--pk:#fc449d;--pkl:#ff7ec3;--pkd:#c4207a;--off:#fff5fb;--gr:#6b3a55;--dk:#1a0a12;--dk3:#3a0a25}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2.5rem;background:linear-gradient(135deg,var(--dk),var(--dk3));box-shadow:0 2px 30px rgba(252,68,157,.2)}
+.nl{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.1rem;color:#fff;text-decoration:none}
+.nl em{color:var(--pkl);font-style:normal}
+.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,.8);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--pkl)}
+.btn-nav{background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff!important;padding:.45rem 1.2rem!important;border-radius:50px;box-shadow:0 4px 15px rgba(252,68,157,.4)}
+.hero-car{min-height:55vh;background:linear-gradient(135deg,var(--dk) 0%,var(--dk3) 60%,#5a1040 100%);display:flex;align-items:flex-end;padding:120px 2.5rem 4rem;position:relative;overflow:hidden}
+.hero-car::before{content:'';position:absolute;top:-40%;right:-10%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(252,68,157,.2) 0%,transparent 65%);border-radius:50%}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.htag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(252,68,157,.15);border:1px solid rgba(252,68,157,.4);color:var(--pkl);font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:.32rem .9rem;border-radius:50px;margin-bottom:1.2rem}
+h1{font-family:'Raleway',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;color:#fff;line-height:1}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--pk),var(--pkl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.hero-sub{margin-top:1.2rem;font-size:1rem;font-weight:300;color:rgba(255,255,255,.65);line-height:1.7;max-width:500px}
+section{padding:5rem 2.5rem}
+.stag{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--pk);margin-bottom:.6rem}
+h2{font-family:'Raleway',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;line-height:1.05}
+/* RACES GRID */
+.races-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2rem;margin-top:2.5rem}
+.race-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid rgba(252,68,157,.1);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .3s}
+.race-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(252,68,157,.2);border-color:rgba(252,68,157,.3)}
+.race-img-w{position:relative;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(135deg,var(--pk),var(--pkd))}
+.race-img-w img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.race-card:hover .race-img-w img{transform:scale(1.04)}
+.race-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(255,255,255,.6)}
+.race-edition{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.6);color:#fff;border-radius:20px;padding:3px 10px;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.race-body{padding:1.5rem}
+.race-date{font-size:.72rem;font-weight:700;color:var(--pk);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.race-name{font-family:'Raleway',sans-serif;font-size:1.4rem;font-weight:900;line-height:1.2}
+.race-desc{margin-top:.5rem;font-size:.85rem;color:var(--gr);line-height:1.65}
+.race-actions{margin-top:1.2rem;display:flex;gap:.75rem}
+.btn-info{display:inline-flex;align-items:center;gap:.35rem;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;text-decoration:none;border-radius:8px;padding:.55rem 1.1rem;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 12px rgba(252,68,157,.25);transition:all .2s}
+.btn-info:hover{box-shadow:0 6px 18px rgba(252,68,157,.45);transform:translateY(-1px)}
+.ld{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--gr);font-size:.82rem;gap:.5rem}
+.spin{width:16px;height:16px;border:2px solid rgba(252,68,157,.2);border-top-color:var(--pk);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gr)}
+/* CTA */
+#cta{background:linear-gradient(135deg,var(--pk),var(--pkd));padding:5rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+#cta::before{content:'';position:absolute;top:-50%;left:-10%;width:50vw;height:50vw;background:rgba(255,255,255,.08);border-radius:50%}
+#cta h2{color:#fff;font-family:'Raleway',sans-serif;font-size:2.5rem;font-weight:900;position:relative;z-index:2}
+#cta p{color:rgba(255,255,255,.8);font-size:1rem;max-width:500px;margin:1rem auto 2rem;line-height:1.7;position:relative;z-index:2}
+.btn-white{display:inline-block;background:#fff;color:var(--pk);text-decoration:none;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 2.2rem;border-radius:50px;box-shadow:0 8px 25px rgba(0,0,0,.15);transition:all .25s;position:relative;z-index:2}
+.btn-white:hover{box-shadow:0 12px 35px rgba(0,0,0,.25);transform:translateY(-2px)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90deg,var(--pk),var(--pkl),var(--pk)) 1;padding:2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.2)}
+@media(max-width:900px){.races-grid{grid-template-columns:1fr}.nav-links{display:none}nav{padding:.9rem 1.2rem}section{padding:3.5rem 1.2rem}}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/ecdb.js"></script>
+  <script src="js/web.js"></script>
+  <script src="js/temes.js"></script>
+<style>
+.hero-car h1 em{font-style:normal}
+.bt-wrap{max-width:1150px;margin:0 auto}
+.bt-cats{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem}
+.bt-cat{border:1.5px solid rgba(252,68,157,.25);background:#fff;color:var(--gr);border-radius:50px;padding:.55rem 1.2rem;font-family:inherit;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .2s}
+.bt-cat:hover,.bt-cat.on{background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;border-color:var(--pk)}
+.bt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem}
+.bt-card{background:#fff;border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 8px 30px rgba(252,68,157,.1);transition:transform .25s,box-shadow .25s}
+.bt-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(252,68,157,.2)}
+.bt-img{aspect-ratio:1;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid rgba(252,68,157,.08)}
+.bt-img img{width:100%;height:100%;object-fit:contain;padding:1rem}
+.bt-img span{font-size:3rem;opacity:.4}
+.bt-tag{position:absolute;top:.8rem;left:.8rem;background:var(--pk);color:#fff;font-style:normal;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px}
+.bt-tag.bt-out{left:auto;right:.8rem;background:#1a0a12}
+.bt-body{padding:1.1rem 1.2rem 1.3rem}
+.bt-body small,.bt-pinfo small{color:var(--pk);font-weight:800;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+.bt-body h3{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.05rem;margin:.3rem 0 .5rem;color:var(--dk)}
+.bt-price{font-weight:900;font-size:1.1rem;color:var(--dk)}.bt-price.big{font-size:1.6rem;margin:.6rem 0 1rem;color:var(--pk)}
+.bt-cartbtn{position:fixed;right:1.4rem;bottom:1.4rem;z-index:900;border:0;cursor:pointer;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;font-family:inherit;font-weight:900;font-size:1rem;padding:.95rem 1.3rem;border-radius:50px;box-shadow:0 10px 30px rgba(252,68,157,.45);transform:scale(.9);opacity:.85;transition:all .2s}
+.bt-cartbtn.on{transform:scale(1);opacity:1}
+.bt-mo{position:fixed;inset:0;z-index:2000;background:rgba(26,10,18,.65);display:none;align-items:center;justify-content:center;padding:1rem}
+.bt-mo.open{display:flex}
+.bt-box{background:#fff;border-radius:24px;max-width:920px;width:100%;max-height:92vh;overflow:auto;position:relative;padding:2rem}
+.bt-x{position:absolute;top:.9rem;right:.9rem;width:38px;height:38px;border-radius:50%;border:0;background:var(--off);color:var(--dk);font-size:1rem;cursor:pointer;z-index:3}
+.bt-pgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem}
+.bt-main{aspect-ratio:1;background:var(--off);border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bt-main img{width:100%;height:100%;object-fit:contain}.bt-main span{font-size:4rem;opacity:.4}
+.bt-thumbs{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+.bt-thumbs img{width:64px;height:64px;object-fit:contain;background:var(--off);border-radius:10px;cursor:pointer;border:2px solid transparent}
+.bt-thumbs img.on{border-color:var(--pk)}
+.bt-pinfo h2{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.8rem;line-height:1.1;margin-top:.4rem}
+.bt-desc{color:var(--gr);line-height:1.7;font-size:.9rem;white-space:pre-line;margin-bottom:1.2rem}
+.bt-l{display:block;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gr);margin:1rem 0 .5rem}
+.bt-sizes{display:flex;gap:.4rem;flex-wrap:wrap}
+.bt-sizes button{min-width:46px;padding:.55rem .7rem;border:1.5px solid rgba(252,68,157,.25);background:#fff;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer}
+.bt-sizes button.on{background:var(--pk);border-color:var(--pk);color:#fff}
+.bt-qty{display:inline-flex;align-items:center;border:1.5px solid rgba(252,68,157,.25);border-radius:50px;overflow:hidden}
+.bt-qty button{border:0;background:#fff;width:40px;height:40px;font-size:1.1rem;cursor:pointer;color:var(--dk)}
+.bt-qty span{min-width:34px;text-align:center;font-weight:800}
+.bt-qty.sm button{width:30px;height:30px}.bt-qty.sm{display:flex;width:max-content;margin-top:.5rem}
+.bt-btn{display:block;width:100%;margin-top:1.4rem;border:0;cursor:pointer;background:linear-gradient(135deg,var(--pk),var(--pkd));color:#fff;font-family:inherit;font-weight:800;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;padding:1rem;border-radius:50px;box-shadow:0 10px 26px rgba(252,68,157,.35)}
+.bt-btn:disabled{opacity:.5;cursor:not-allowed}
+.bt-err{color:#dc2626;font-size:.82rem;font-weight:600;min-height:1em;margin-top:.6rem}
+.bt-side{justify-content:flex-end;padding:0}
+.bt-drawer{background:#fff;width:440px;max-width:100%;height:100%;overflow:auto;padding:1.8rem 1.6rem;position:relative;animation:sl .25s}
+@keyframes sl{from{transform:translateX(40px);opacity:0}}
+.bt-drawer h2{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.6rem;margin-bottom:1.2rem}
+.bt-drawer h3{font-family:'Raleway',sans-serif;font-weight:900;font-size:1.1rem;margin:1.6rem 0 .8rem}
+.bt-line{display:flex;gap:.8rem;align-items:flex-start;padding:.9rem 0;border-bottom:1px solid rgba(252,68,157,.12);font-size:.88rem}
+.bt-line img,.bt-noimg{width:58px;height:58px;object-fit:contain;background:var(--off);border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.bt-line small{color:var(--gr)}
+.bt-del{border:0;background:none;color:var(--gr);font-size:.72rem;text-decoration:underline;cursor:pointer;margin-top:.3rem}
+.bt-total{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;font-size:1.1rem}.bt-total b{font-size:1.4rem;color:var(--pk)}
+.bt-f{margin-bottom:.8rem}.bt-f2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.bt-f label{display:block;font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gr);margin-bottom:.35rem}
+.bt-f input,.bt-f select,.bt-f textarea{width:100%;border:1.5px solid rgba(252,68,157,.2);border-radius:10px;padding:.7rem .8rem;font-family:inherit;font-size:.88rem;outline:none}
+.bt-f input:focus,.bt-f select:focus,.bt-f textarea:focus{border-color:var(--pk)}
+.bt-chk{display:flex;gap:.5rem;align-items:flex-start;font-size:.78rem;color:var(--gr);line-height:1.45;cursor:pointer}
+.bt-chk input{margin-top:.15rem;accent-color:var(--pk)}
+.bad{border-color:#dc2626!important;color:#dc2626}
+.bt-note{font-size:.75rem;color:var(--gr);text-align:center;margin-top:.7rem}
+.bt-ok{text-align:center;padding-top:2rem}.bt-ok p{color:var(--gr);line-height:1.7;margin:.6rem 0}
+.bt-pay{background:var(--off);border-radius:14px;padding:1rem;text-align:left;margin-top:1rem}.bt-pay p{white-space:pre-line;margin:.3rem 0 0}
+@media(max-width:760px){.bt-pgrid{grid-template-columns:1fr}.bt-box{padding:1.3rem}.bt-grid{grid-template-columns:repeat(2,1fr);gap:.8rem}.bt-body{padding:.8rem}.bt-body h3{font-size:.9rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nl">Eci<em>Isaac</em>Galvez</a>
+  <ul class="nav-links">
+    <li><a href="escola.html">Escola</a></li>
+    <li><a href="competicions.html">Competicions</a></li>
+    <li><a href="carreres.html">Carreres</a></li>
+    <li><a href="equip.html">Equip Cadet</a></li>
+    <li><a href="botiga.html" class="active">Botiga</a></li>
+    <li><a href="contacte.html">Contacte</a></li>
+    <li><a href="index.html#inscripcio" class="btn-nav">Inscriu-te</a></li>
+    <li><a href="admin.html" style="color:rgba(255,255,255,0.3);font-size:0.7rem">&#x2699;&#xFE0F;</a></li>
+  </ul>
+</nav>
+
+<div class="hero-car">
+  <div class="hero-content">
+    <div class="htag">&#x1F6CD;&#xFE0F; Botiga del club</div>
+    <h1>Vesteix-te<em>amb l'escola</em></h1>
+    <p class="hero-sub">Equipacions, maillots, culots, xandalls, sudaderes i motxilles oficials de l'Escola de Ciclisme Isaac Gálvez.</p>
+  </div>
+</div>
+
+<section style="background:var(--off)">
+  <div class="bt-wrap">
+    <div class="bt-cats" id="bt-cats"></div>
+    <div class="bt-grid" id="bt-grid"><div class="ld"><div class="spin"></div> Carregant productes...</div></div>
+  </div>
+</section>
+
+<section id="cta">
+  <h2>Com funciona?</h2>
+  <p>Tria els productes i la talla, fes la comanda i et confirmarem disponibilitat i pagament. Les comandes es recullen al club.</p>
+</section>
+
+<footer>
+  <p class="footer-copy">&copy; 2025 Escola de Ciclisme Ecisaacgalvez &middot; Vilanova i la Geltru</p>
+</footer>
+
+<!-- Botó cistella -->
+<button class="bt-cartbtn" id="bt-cartbtn" onclick="openCart()" aria-label="Cistella">&#x1F6D2; <span id="bt-count">0</span></button>
+
+<!-- Fitxa de producte -->
+<div class="bt-mo" id="bt-prod" onclick="if(event.target===this)closeMo('bt-prod')">
+  <div class="bt-box bt-pbox"><button class="bt-x" onclick="closeMo('bt-prod')">&#x2715;</button><div id="bt-prod-c"></div></div>
+</div>
+
+<!-- Cistella + comanda -->
+<div class="bt-mo bt-side" id="bt-cart" onclick="if(event.target===this)closeMo('bt-cart')">
+  <div class="bt-drawer"><button class="bt-x" onclick="closeMo('bt-cart')">&#x2715;</button><div id="bt-cart-c"></div></div>
+</div>
+
+<script>
+var PRODS=[],CAT='Tots',CART=[],PAG='';
+try{CART=JSON.parse(localStorage.getItem('ec_cart')||'[]');}catch(e){CART=[];}
+function eur(n){return Number(n||0).toLocaleString('ca-ES',{style:'currency',currency:'EUR'});}
+function imgs(p){return String(p.imatges||'').split('\n').map(function(s){return s.trim();}).filter(Boolean);}
+function talles(p){return String(p.talles||'').split(',').map(function(s){return s.trim();}).filter(Boolean);}
+function saveCart(){localStorage.setItem('ec_cart',JSON.stringify(CART));var n=CART.reduce(function(a,c){return a+c.q;},0);document.getElementById('bt-count').textContent=n;document.getElementById('bt-cartbtn').classList.toggle('on',n>0);}
+function closeMo(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function openMo(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMo('bt-prod');closeMo('bt-cart');}});
+
+window.onload=function(){
+  saveCart();
+  ECDB.getConfig().then(function(c){PAG=c.botiga_pagament||'';}).catch(function(){});
+  ECDB.getProductes().then(function(d){
+    PRODS=d;
+    var cats=['Tots'].concat(d.map(function(p){return p.categoria;}).filter(function(c,i,a){return c&&a.indexOf(c)===i;}));
+    document.getElementById('bt-cats').innerHTML=cats.length>2?cats.map(function(c){return '<button class="bt-cat'+(c===CAT?' on':'')+'" onclick="setCat(this,\''+ecEsc(c)+'\')">'+ecEsc(c)+'</button>';}).join(''):'';
+    renderGrid();
+  }).catch(function(e){console.error(e);document.getElementById('bt-grid').innerHTML='<div class="empty">No s\'ha pogut carregar la botiga.</div>';});
+};
+function setCat(b,c){CAT=c;document.querySelectorAll('.bt-cat').forEach(function(x){x.classList.toggle('on',x===b);});renderGrid();}
+function renderGrid(){
+  var g=document.getElementById('bt-grid'),l=PRODS.filter(function(p){return CAT==='Tots'||p.categoria===CAT;});
+  if(!l.length){g.innerHTML='<div class="empty" style="grid-column:1/-1"><div style="font-size:2.5rem">&#x1F6CD;&#xFE0F;</div><p>Aviat hi haurà productes a la botiga!</p></div>';return;}
+  g.innerHTML=l.map(function(p){
+    var im=imgs(p)[0];
+    return '<article class="bt-card" onclick="openProd(\''+p.id+'\')">'
+      +'<div class="bt-img">'+(im?'<img src="'+ecEsc(im)+'" alt="'+ecEsc(p.nom)+'" loading="lazy">':'<span>&#x1F6B4;</span>')
+      +(p.destacat?'<i class="bt-tag">Novetat</i>':'')+(p.esgotat?'<i class="bt-tag bt-out">Esgotat</i>':'')+'</div>'
+      +'<div class="bt-body"><small>'+ecEsc(p.categoria)+'</small><h3>'+ecEsc(p.nom)+'</h3><div class="bt-price">'+eur(p.preu)+'</div></div></article>';
+  }).join('');
+}
+function openProd(id){
+  var p=PRODS.filter(function(x){return x.id===id;})[0];if(!p)return;
+  var im=imgs(p),t=talles(p);
+  document.getElementById('bt-prod-c').innerHTML='<div class="bt-pgrid"><div><div class="bt-main" id="bt-main">'+(im[0]?'<img src="'+ecEsc(im[0])+'" alt="">':'<span>&#x1F6B4;</span>')+'</div>'
+    +(im.length>1?'<div class="bt-thumbs">'+im.map(function(u,i){return '<img src="'+ecEsc(u)+'" class="'+(i?'':'on')+'" onclick="thumb(this)">';}).join('')+'</div>':'')+'</div>'
+    +'<div class="bt-pinfo"><small>'+ecEsc(p.categoria)+'</small><h2>'+ecEsc(p.nom)+'</h2><div class="bt-price big">'+eur(p.preu)+'</div>'
+    +(p.descripcio?'<p class="bt-desc">'+ecEsc(p.descripcio)+'</p>':'')
+    +(t.length?'<label class="bt-l">Talla</label><div class="bt-sizes" id="bt-sizes">'+t.map(function(s){return '<button type="button" onclick="pickSize(this)">'+ecEsc(s)+'</button>';}).join('')+'</div>':'')
+    +'<label class="bt-l">Quantitat</label><div class="bt-qty"><button type="button" onclick="qty(-1)">−</button><span id="bt-q">1</span><button type="button" onclick="qty(1)">+</button></div>'
+    +'<p class="bt-err" id="bt-perr"></p>'
+    +(p.esgotat?'<button class="bt-btn" disabled>Esgotat</button>':'<button class="bt-btn" onclick="addCart(\''+p.id+'\')">Afegir a la cistella</button>')
+    +'</div></div>';
+  openMo('bt-prod');
+}
+function thumb(el){document.querySelector('#bt-main img').src=el.src;document.querySelectorAll('.bt-thumbs img').forEach(function(x){x.classList.toggle('on',x===el);});}
+function pickSize(b){document.querySelectorAll('#bt-sizes button').forEach(function(x){x.classList.toggle('on',x===b);});document.getElementById('bt-perr').textContent='';}
+function qty(d){var e=document.getElementById('bt-q');e.textContent=Math.max(1,Math.min(20,+e.textContent+d));}
+function addCart(id){
+  var p=PRODS.filter(function(x){return x.id===id;})[0],sz=document.querySelector('#bt-sizes button.on');
+  if(talles(p).length&&!sz){document.getElementById('bt-perr').textContent='Tria una talla';return;}
+  var t=sz?sz.textContent:'',q=+document.getElementById('bt-q').textContent;
+  var ex=CART.filter(function(c){return c.id===id&&c.talla===t;})[0];
+  if(ex)ex.q+=q;else CART.push({id:id,nom:p.nom,talla:t,preu:Number(p.preu)||0,q:q,img:imgs(p)[0]||''});
+  saveCart();closeMo('bt-prod');openCart();
+}
+function total(){return CART.reduce(function(a,c){return a+c.preu*c.q;},0);}
+function openCart(){renderCart();openMo('bt-cart');}
+function renderCart(){
+  var c=document.getElementById('bt-cart-c');
+  if(!CART.length){c.innerHTML='<h2>La cistella</h2><div class="empty"><div style="font-size:2.5rem">&#x1F6D2;</div><p>La cistella és buida</p></div>';return;}
+  c.innerHTML='<h2>La cistella</h2>'+CART.map(function(it,i){
+    return '<div class="bt-line">'+(it.img?'<img src="'+ecEsc(it.img)+'">':'<span class="bt-noimg">&#x1F6B4;</span>')
+      +'<div style="flex:1"><b>'+ecEsc(it.nom)+'</b>'+(it.talla?'<br><small>Talla '+ecEsc(it.talla)+'</small>':'')
+      +'<div class="bt-qty sm"><button onclick="lineQ('+i+',-1)">−</button><span>'+it.q+'</span><button onclick="lineQ('+i+',1)">+</button></div></div>'
+      +'<div style="text-align:right"><b>'+eur(it.preu*it.q)+'</b><br><button class="bt-del" onclick="lineQ('+i+',-999)">Treure</button></div></div>';
+  }).join('')
+  +'<div class="bt-total"><span>Total</span><b>'+eur(total())+'</b></div>'
+  +'<form id="bt-form" novalidate><h3>Les teves dades</h3>'
+  +'<div class="bt-f"><label>Nom i cognoms *</label><input name="nom" required></div>'
+  +'<div class="bt-f2"><div class="bt-f"><label>Telèfon *</label><input name="telefon" type="tel" required></div><div class="bt-f"><label>Correu *</label><input name="email" type="email" required></div></div>'
+  +'<div class="bt-f"><label>Nom del corredor/a (si és per a un alumne)</label><input name="corredor"></div>'
+  +'<div class="bt-f"><label>Forma de pagament</label><select name="pagament"><option>Bizum</option><option>Transferència</option><option>En efectiu en recollir-ho</option></select></div>'
+  +'<div class="bt-f"><label>Comentaris</label><textarea name="notes" rows="2"></textarea></div>'
+  +'<label class="bt-chk"><input type="checkbox" name="ok" required> Accepto que el club faci servir aquestes dades per gestionar la comanda. *</label>'
+  +'<p class="bt-err" id="bt-cerr"></p><button class="bt-btn" id="bt-send" type="submit">Fer la comanda · '+eur(total())+'</button>'
+  +'<p class="bt-note">No es cobra res ara. Et confirmarem la comanda i com pagar-la.</p></form>';
+  document.getElementById('bt-form').onsubmit=sendOrder;
+}
+function lineQ(i,d){CART[i].q+=d;if(CART[i].q<1)CART.splice(i,1);saveCart();renderCart();}
+function sendOrder(e){
+  e.preventDefault();
+  var f=e.target,err=document.getElementById('bt-cerr'),btn=document.getElementById('bt-send');
+  f.querySelectorAll('.bad').forEach(function(x){x.classList.remove('bad');});
+  var bad=Array.prototype.filter.call(f.querySelectorAll('[required]'),function(el){return el.type==='checkbox'?!el.checked:!el.value.trim();});
+  if(f.email.value&&!/^\S+@\S+\.\S+$/.test(f.email.value))bad.push(f.email);
+  if(bad.length){bad.forEach(function(x){(x.type==='checkbox'?x.parentNode:x).classList.add('bad');});err.textContent='Revisa els camps obligatoris (*).';return;}
+  var o={nom:f.nom.value.trim(),telefon:f.telefon.value.trim(),email:f.email.value.trim(),corredor:f.corredor.value.trim(),pagament:f.pagament.value,notes:f.notes.value.trim(),
+    items:CART.map(function(c){return{id:c.id,nom:c.nom,talla:c.talla,preu:c.preu,q:c.q};}),total:Math.round(total()*100)/100,estat:'Nova'};
+  btn.disabled=true;btn.textContent='Enviant...';err.textContent='';
+  ECDB.addComanda(o).then(function(){
+    CART=[];saveCart();
+    document.getElementById('bt-cart-c').innerHTML='<div class="bt-ok"><div style="font-size:3rem">&#x1F389;</div><h2>Comanda enviada!</h2><p>Gràcies, '+ecEsc(o.nom)+'. Hem rebut la teva comanda de <b>'+eur(o.total)+'</b>. Et contactarem a '+ecEsc(o.email)+' per confirmar-la.</p>'
+      +(PAG?'<div class="bt-pay"><b>Com pagar</b><p>'+ecEsc(PAG)+'</p></div>':'')+'<button class="bt-btn" onclick="closeMo(\'bt-cart\')">Tancar</button></div>';
+  }).catch(function(ex){console.error(ex);err.textContent="No s'ha pogut enviar. Torna-ho a provar o contacta'ns.";btn.disabled=false;btn.textContent='Fer la comanda';});
+}
+</script>
+</body>
+</html>

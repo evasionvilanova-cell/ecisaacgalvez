@@ -48,6 +48,15 @@
       return sb.from('inscripcions').insert(row).then(ok);
     },
 
+    // Botiga: productes actius (ordenats) i comandes
+    getProductes: function () {
+      if (!READY) return Promise.resolve([]);
+      return sb.from('productes').select('*').eq('actiu', true).order('ordre', { ascending: true }).order('created_at', { ascending: false }).then(ok).then(clean);
+    },
+    addComanda: function (row) {
+      if (!READY) return Promise.reject(new Error('NO_DB'));
+      return sb.from('comandes').insert(row).then(ok);
+    },
     addMissatge: function (row) {
       if (!READY) return Promise.reject(new Error('NO_DB'));
       return sb.from('missatges').insert(row).then(ok);
