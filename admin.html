@@ -55,7 +55,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 .logoutb:hover{color:rgba(255,255,255,0.55)}
 
 /* MAIN */
-.main{margin-left:var(--sw);height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.main{margin-left:var(--sw);flex:1;min-width:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
 .tb{background:#fff;border-bottom:1px solid rgba(252,68,157,0.15);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
 .tb h2{font-family:'Raleway',sans-serif;font-size:1.25rem;font-weight:900}
 .tbr{display:flex;align-items:center;gap:.75rem}
@@ -187,6 +187,13 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 </style>
 <style>
 #nav-ins:empty,#nav-msg:empty{display:none}
+.temes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem}
+.tm{border:2px solid rgba(252,68,157,.15);border-radius:14px;overflow:hidden;cursor:pointer;background:#fff;transition:border-color .2s}
+.tm.on{border-color:#fc449d;box-shadow:0 0 0 3px rgba(252,68,157,.15)}
+.tm-sw{height:64px;display:flex;align-items:flex-end;padding:.6rem .8rem;color:#fff;font-size:1.3rem;font-weight:900}
+.tm-b{padding:.7rem .8rem;font-size:.72rem;color:#6b3a55;line-height:1.4}
+.tm-b b{display:block;font-size:.85rem;color:#1a0a12;margin-bottom:.2rem}
+.tm-b a{display:inline-block;margin-top:.5rem;color:#fc449d;font-weight:800;text-decoration:none}
 .msg{border:1px solid rgba(252,68,157,.15);border-radius:14px;padding:1rem 1.2rem;margin-bottom:.8rem;background:#fff}
 .msg.new{border-left:4px solid #fc449d;background:#fff8fc}
 .msg-h{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.8rem}
@@ -202,6 +209,8 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/ecdb.js"></script>
+<script>window.EC_ADMIN=1;</script>
+<script src="js/temes.js"></script>
 </head>
 <body>
 
@@ -266,7 +275,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
       <h2 id="ptitle">Resum general</h2>
       <div class="tbr">
         <span class="sv" id="sv">&#x2713; Guardat!</span>
-        <button class="btn bp" onclick="saveHome()">&#x1F4BE; Guardar canvis</button>
+        <button class="btn bp" id="tb-save" onclick="saveHome()" style="display:none">&#x1F4BE; Guardar canvis</button>
       </div>
     </div>
     <div class="ct">
@@ -304,6 +313,14 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 
       <!-- HOME -->
       <div class="panel" id="p-home">
+        <div class="card" style="margin-bottom:1.2rem">
+          <div class="ch"><h3>&#x1F3A8; Disseny de la web</h3></div>
+          <div class="cb">
+            <p class="mig" style="margin:0 0 .9rem">Prova els dissenys amb <b>Previsualitzar</b> (només ho veus tu). Quan te n'agradi un, tria'l aquí i prem <b>Guardar canvis</b>: es canvia a tota la web.</p>
+            <div class="temes" id="temes"></div>
+            <input type="hidden" id="h-tema">
+          </div>
+        </div>
         <div class="tabs">
           <div class="tab on" onclick="swT(this,'t-hero')">Hero</div>
           <div class="tab" onclick="swT(this,'t-nos')">Nosaltres</div>
@@ -665,6 +682,17 @@ function exportIns(){
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='inscripcions-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }
 
+// ---------- DISSENY ----------
+function renderTemes(){
+  var cur=document.getElementById('h-tema').value||'rosa',T=window.EC_TEMES||{};
+  document.getElementById('temes').innerHTML=Object.keys(T).map(function(k){
+    var t=T[k],ac=t.accent?t.accent[0]:'#fc449d',dk=t.d1?t.d1[0]:'#1a0a12',hf=t.head||"'Raleway'";
+    return '<div class="tm'+(k===cur?' on':'')+'" onclick="pickTema(\''+k+'\')"><div class="tm-sw" style="background:linear-gradient(135deg,'+dk+' 55%,'+ac+');font-family:'+hf+',sans-serif'+(t.headUpper?';text-transform:uppercase':'')+'">Aa</div>'
+      +'<div class="tm-b"><b>'+(k===cur?'&#x2714; ':'')+t.nom+'</b>'+(t.desc||'El disseny rosa de sempre')+'<br><a href="index.html?tema='+k+'" target="_blank" onclick="event.stopPropagation()">Previsualitzar &#x2197;</a></div></div>';
+  }).join('');
+}
+function pickTema(k){document.getElementById('h-tema').value=k;renderTemes();toast('Prem Guardar canvis per aplicar-lo a la web');}
+
 // ---------- MISSATGES ----------
 var MSG=[];
 function loadMsg(){
@@ -767,6 +795,7 @@ function showP(id){
   document.getElementById('p-'+id).classList.add('on');
   document.querySelectorAll('.ni').forEach(function(n){if(n.getAttribute('onclick')&&n.getAttribute('onclick').indexOf("'"+id+"'")>=0)n.classList.add('on');});
   document.getElementById('ptitle').textContent=PT[id]||id;
+  document.getElementById('tb-save').style.display=id==='home'?'':'none';
   if(id==='dashboard')loadDash();
   if(id==='inscripcions')loadIns().then(renderIns);
   if(id==='noticies')loadNews();
@@ -788,11 +817,12 @@ document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',
 
 function loadAll(){loadDash();loadConfig();loadIns();loadMsg();}
 
-var CM=[['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb']];
+var CM=[['h-tema','tema'],['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb']];
 
 function loadConfig(){
   apiCfg().then(function(cfg){
     CM.forEach(function(x){var el=document.getElementById(x[0]);if(el&&cfg[x[1]]!==undefined)el.value=cfg[x[1]];});
+    renderTemes();
   }).catch(function(e){console.error(e);});
 }
 function saveHome(){
