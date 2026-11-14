@@ -496,12 +496,12 @@
         <h1><span data-cfg="hero_title">Ciclisme</span><span class="accent" data-cfg="hero_subtitle">per a joves</span></h1>
         <p class="hero-sub" data-cfg="hero_desc">Entrenaments i competicions per a nens i nenes de 6 a 14 anys al circuit de Vilanova i la Geltrú.</p>
         <div class="hero-btns">
-          <a href="#inscripcio" class="btn btn-primary" data-cfg="hero_btn1">Inscriu-te ara</a>
-          <a href="#nosaltres" class="btn btn-ghost" data-cfg="hero_btn2">Coneix l'escola</a>
+          <a href="#inscripcio" class="btn btn-primary" data-cfg="hero_btn1" data-cfg-href="hero_btn1_url">Inscriu-te ara</a>
+          <a href="#nosaltres" class="btn btn-ghost" data-cfg="hero_btn2" data-cfg-href="hero_btn2_url">Coneix l'escola</a>
         </div>
       </div>
       <div class="hero-img-wrap">
-        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=763,fit=crop/AGBzKzbj74tKMokG/imagen-de-whatsapp-2025-10-25-a-las-13.16.33_8a66047a-ALp2r2R51ZfV07yQ.jpg" alt="Ciclistes joves" />
+        <img data-cfg-src="hero_img" src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=763,fit=crop/AGBzKzbj74tKMokG/imagen-de-whatsapp-2025-10-25-a-las-13.16.33_8a66047a-ALp2r2R51ZfV07yQ.jpg" alt="Ciclistes joves" />
         <div class="hero-img-badge">
           <strong>6–14</strong>anys
         </div>
@@ -595,10 +595,12 @@
                 <option>Infantils (6–14 anys)</option>
                 <option>Cadets (+15 anys)</option>
               </select></div>
+            <!-- Talla i llicència amagades de moment (per recuperar-les, treure el comentari)
             <div class="form-group"><label>Talla de roba</label>
               <select name="talla"><option value="">—</option><option>6</option><option>8</option><option>10</option><option>12</option><option>14</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
             <div class="form-group"><label>Té llicència federativa?</label>
               <select name="llicencia"><option>No</option><option>Sí, amb aquest club</option><option>Sí, amb un altre club</option></select></div>
+            -->
             <div class="form-group fc-full"><label>Al·lèrgies o observacions mèdiques</label><textarea name="salut" rows="2" placeholder="Si no n'hi ha, deixa-ho en blanc"></textarea></div>
           </div>
           <div class="fc-step">2 · Pare, mare o tutor/a</div>

@@ -63,6 +63,17 @@
           var v = cfg[el.getAttribute('data-cfg')];
           if (v) el.textContent = v;
         });
+        // Enllaços i imatges editables (data-cfg-href / data-cfg-src)
+        document.querySelectorAll('[data-cfg-href]').forEach(function (el) {
+          var u = safe(cfg[el.getAttribute('data-cfg-href')]);
+          if (!u) return;
+          el.setAttribute('href', u);
+          if (/^https?:/i.test(u)) { el.target = '_blank'; el.rel = 'noopener'; }
+        });
+        document.querySelectorAll('[data-cfg-src]').forEach(function (el) {
+          var u = safe(cfg[el.getAttribute('data-cfg-src')]);
+          if (u) el.setAttribute('src', u);
+        });
       }).catch(function () {});
     }
 

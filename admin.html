@@ -354,13 +354,16 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
         </div>
         <div class="tc on" id="t-hero">
           <div class="card"><div class="ch"><h3>Banner principal</h3></div><div class="cb">
+            <p class="mig" style="margin:0 0 1rem">Aquí canvies la portada (textos, enllaços dels botons i foto). Per posar un <b>avís / banner rosa a dalt</b> o un <b>pop-up</b>, ves a <b>Notícies</b> i marca-la com a Banner o Pop-up.</p>
             <div class="g2">
               <div>
                 <div class="fg"><label>Titol</label><input id="h-t" type="text"></div>
                 <div class="fg"><label>Subtitol (rosa)</label><input id="h-s" type="text"></div>
                 <div class="fg"><label>Descripcio</label><textarea id="h-d"></textarea></div>
-                <div class="fg"><label>Boto 1</label><input id="h-b1" type="text"></div>
-                <div class="fg"><label>Boto 2</label><input id="h-b2" type="text"></div>
+                <div class="fg"><label>Boto 1 · text</label><input id="h-b1" type="text" placeholder="Inscriu-te ara"></div>
+                <div class="fg"><label>Boto 1 · enllaç</label><input id="h-b1u" type="text" placeholder="#inscripcio, competicions.html o https://..."></div>
+                <div class="fg"><label>Boto 2 · text</label><input id="h-b2" type="text" placeholder="Coneix l'escola"></div>
+                <div class="fg"><label>Boto 2 · enllaç</label><input id="h-b2u" type="text" placeholder="#nosaltres, botiga.html o https://..."></div>
               </div>
               <div>
                 <div class="fg"><label>Etiqueta superior</label><input id="h-tag" type="text"></div>
@@ -368,6 +371,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
                 <div class="fg"><label>Stat 1 text</label><input id="h-s1l" type="text"></div>
                 <div class="fg"><label>Stat 2 numero</label><input id="h-s2n" type="text"></div>
                 <div class="fg"><label>Stat 2 text</label><input id="h-s2l" type="text"></div>
+                <div class="fg"><label>Foto principal</label><input id="h-img" type="text" placeholder="https://... (o puja-la amb el botó)" oninput="var p=document.getElementById('h-img-prev');p.src=this.value;p.style.display=this.value?'block':'none'"><img id="h-img-prev" alt="" style="display:none;max-width:100%;max-height:160px;border-radius:10px;margin-top:.5rem;object-fit:cover"></div>
               </div>
             </div>
           </div></div>
@@ -712,7 +716,7 @@ function apiCfg(data){
 
 // Botó "Pujar imatge" al costat dels camps d'imatge
 function addUploaders(){
-  ['sm-i','rm-i','race-i','nm-i'].forEach(function(id){
+  ['sm-i','rm-i','race-i','nm-i','h-img'].forEach(function(id){
     var inp=document.getElementById(id);if(!inp)return;
     var l=document.createElement('label');l.className='upl';
     l.innerHTML='&#x1F4F7; Pujar imatge des de l\'ordinador / mòbil<input type="file" accept="image/*">';
@@ -1010,11 +1014,12 @@ document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',
 
 function loadAll(){loadDash();loadConfig();loadIns();loadMsg();loadCom();}
 
-var CM=[['h-tema','tema'],['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb'],['h-wa','contact_wa'],['h-adr','contact_adreca'],['h-tt','social_tt'],['h-yt','social_yt'],['h-st','social_strava']];
+var CM=[['h-tema','tema'],['h-t','hero_title'],['h-s','hero_subtitle'],['h-d','hero_desc'],['h-b1','hero_btn1'],['h-b2','hero_btn2'],['h-b1u','hero_btn1_url'],['h-b2u','hero_btn2_url'],['h-img','hero_img'],['h-tag','hero_tag'],['h-s1n','stat1_num'],['h-s1l','stat1_label'],['h-s2n','stat2_num'],['h-s2l','stat2_label'],['h-nt','nos_title'],['h-n1','nos_p1'],['h-n2','nos_p2'],['h-n3','nos_p3'],['h-em','contact_email'],['h-tel','contact_tel'],['h-ig','social_ig'],['h-fb','social_fb'],['h-wa','contact_wa'],['h-adr','contact_adreca'],['h-tt','social_tt'],['h-yt','social_yt'],['h-st','social_strava']];
 
 function loadConfig(){
   apiCfg().then(function(cfg){
     CM.forEach(function(x){var el=document.getElementById(x[0]);if(el&&cfg[x[1]]!==undefined)el.value=cfg[x[1]];});
+    var hi=document.getElementById('h-img');if(hi&&hi.oninput)hi.oninput();
     renderTemes();
   }).catch(function(e){console.error(e);});
 }
