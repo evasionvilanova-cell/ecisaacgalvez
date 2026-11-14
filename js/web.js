@@ -67,6 +67,9 @@
     }
 
     ECDB.getNoticies().then(function (list) {
+      // Les notícies amb data de fi passada ja no es mostren
+      var avui = new Date().toISOString().slice(0, 10);
+      list = list.filter(function (n) { return !n.fins || String(n.fins).slice(0, 10) >= avui; });
       NEWS = list;
       // Banner
       var b = list.filter(function (n) { return n.banner; })[0];

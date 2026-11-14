@@ -617,6 +617,7 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
     <div class="fg"><label>Text complet</label><textarea id="nm-tx" rows="5"></textarea></div>
     <div class="fg"><label>Imatge (URL)</label><input id="nm-i" type="text" placeholder="https://..."></div>
     <div class="fg"><label>Enllaç del botó</label><input id="nm-u" type="text" placeholder="#inscripcio, competicions.html o https://..."></div>
+    <div class="fg"><label>Visible fins a (opcional)</label><input id="nm-f" type="date"><p class="hint">Passada aquesta data, el pop-up i el banner desapareixen sols (ideal: el dia de la cursa).</p></div>
     <label class="chk"><input type="checkbox" id="nm-a" checked> Publicada</label>
     <label class="chk"><input type="checkbox" id="nm-b"> Mostrar com a <b>BANNER</b> a dalt de la web</label>
     <label class="chk"><input type="checkbox" id="nm-p"> Mostrar com a <b>POP-UP</b> en entrar</label>
@@ -909,7 +910,7 @@ function loadNews(){
     NEWS=d.sort(function(a,b){return String(b.data).localeCompare(String(a.data));});
     if(!NEWS.length){w.innerHTML='<div class="empty"><div class="ei">&#x1F4E3;</div><p>Encara no hi ha notícies</p></div>';return;}
     w.innerHTML='<table class="tbl"><thead><tr><th>Data</th><th>Títol</th><th>Publicada</th><th>Banner</th><th>Pop-up</th><th></th></tr></thead><tbody>'+NEWS.map(function(n){
-      return '<tr><td style="white-space:nowrap">'+fd(n.data)+'</td><td><b>'+ecEsc(n.titol)+'</b><br><span style="color:#6b3a55">'+ecEsc(n.resum)+'</span></td>'
+      return '<tr'+(n.fins&&passat(n.fins)?' style="opacity:.45" title="Caducada"':'')+'><td style="white-space:nowrap">'+fd(n.data)+(n.fins?'<br><span style="color:#6b3a55;font-size:.7rem">fins '+fd(n.fins)+'</span>':'')+'</td><td><b>'+ecEsc(n.titol)+'</b><br><span style="color:#6b3a55">'+ecEsc(n.resum)+'</span></td>'
         +'<td><button class="btn bs sm" onclick="togNews(\''+n.id+'\',\'activa\')">'+(n.activa?'&#x2705; Sí':'&#x26D4; No')+'</button></td>'
         +'<td><button class="btn '+(n.banner?'bp':'bs')+' sm" onclick="togNews(\''+n.id+'\',\'banner\')">'+(n.banner?'Banner':'—')+'</button></td>'
         +'<td><button class="btn '+(n.popup?'bp':'bs')+' sm" onclick="togNews(\''+n.id+'\',\'popup\')">'+(n.popup?'Pop-up':'—')+'</button></td>'
@@ -917,7 +918,7 @@ function loadNews(){
     }).join('')+'</tbody></table>';
   }).catch(function(e){console.error(e);w.innerHTML='<div class="empty"><p>Error carregant</p></div>';});
 }
-var NM=[['nm-ti','titol'],['nm-d','data'],['nm-bt','boto'],['nm-r','resum'],['nm-tx','text'],['nm-i','imatge'],['nm-u','enllac']];
+var NM=[['nm-ti','titol'],['nm-d','data'],['nm-bt','boto'],['nm-r','resum'],['nm-tx','text'],['nm-i','imatge'],['nm-u','enllac'],['nm-f','fins']];
 function openNM(){document.getElementById('nm-id').value='';NM.forEach(function(x){document.getElementById(x[0]).value='';});document.getElementById('nm-d').value=new Date().toISOString().slice(0,10);document.getElementById('nm-a').checked=true;document.getElementById('nm-b').checked=false;document.getElementById('nm-p').checked=false;document.getElementById('nm-t').textContent='Nova notícia';oM('mo-news');}
 function editNM(id){var n=NEWS.filter(function(x){return x.id===id;})[0];if(!n)return;document.getElementById('nm-id').value=n.id;NM.forEach(function(x){document.getElementById(x[0]).value=n[x[1]]||'';});document.getElementById('nm-a').checked=!!n.activa;document.getElementById('nm-b').checked=!!n.banner;document.getElementById('nm-p').checked=!!n.popup;document.getElementById('nm-t').textContent='Editar notícia';oM('mo-news');}
 // Només una notícia amb banner i una amb pop-up
@@ -930,8 +931,13 @@ function saveNews(){
   NM.forEach(function(x){b[x[1]]=document.getElementById(x[0]).value.trim();});
   if(!b.titol){toast('Introdueix el títol',false);return;}
   if(!b.data)b.data=new Date().toISOString().slice(0,10);
+  if(!b.fins)b.fins=null;
   b.activa=document.getElementById('nm-a').checked;b.banner=document.getElementById('nm-b').checked;b.popup=document.getElementById('nm-p').checked;
-  clearFlags(b,id).then(function(){return id?ECDB.update('noticies',id,b):ECDB.insert('noticies',b);})
+  var save=function(o){return id?ECDB.update('noticies',id,o):ECDB.insert('noticies',o);};
+  clearFlags(b,id).then(function(){return save(b).catch(function(e){
+      // Si encara no s'ha executat supabase-avisos.sql, desa sense la data de fi
+      if(String(e&&e.message).indexOf('fins')>-1){var o=Object.assign({},b);delete o.fins;toast("Desat sense data de fi: executa supabase-avisos.sql",false);return save(o);}
+      throw e;});})
     .then(function(){cM('mo-news');toast('Notícia guardada!');loadNews();}).catch(function(e){console.error(e);toast('Error',false);});
 }
 function togNews(id,k){
@@ -1114,13 +1120,32 @@ function saveRider(){
 }
 function delR(id){if(!confirm('Eliminar corredor?'))return;api('delete','corredors',null,id).then(function(){toast('Eliminat');loadRiders();loadDash();});}
 
+var RACES=[],COMPS=[];
+function passat(d){return !!d&&String(d).slice(0,10)<new Date().toISOString().slice(0,10);}
+// Crea un avís (pop-up + banner) amb l'enllaç d'inscripció d'una cursa
+function anunciar(table,id){
+  var r=(table==='carreres'?RACES:COMPS).filter(function(x){return x.id===id;})[0];if(!r)return;
+  showP('noticies');openNM();
+  var d=r.date?String(r.date).slice(0,10):'';
+  document.getElementById('nm-ti').value='Inscripcions obertes: '+r.name;
+  document.getElementById('nm-r').value=[d?fd(d):'',r.place||'',r.edition||''].filter(Boolean).join(' · ');
+  document.getElementById('nm-tx').value=r.description||r.notes||("Ja et pots inscriure a "+r.name+". No t'ho perdis!");
+  document.getElementById('nm-i').value=r.img||'';
+  document.getElementById('nm-u').value=r.url||'';
+  document.getElementById('nm-bt').value="Inscriu-t'hi";
+  document.getElementById('nm-f').value=d;
+  document.getElementById('nm-p').checked=true;document.getElementById('nm-b').checked=true;
+  document.getElementById('nm-t').textContent='Anunciar cursa';
+  toast('Revisa el text i prem Guardar');
+}
 function loadComps(){
   var w=document.getElementById('comp-wrap');w.innerHTML='<div class="ld"><div class="spin"></div> Carregant...</div>';
   api('getAll','competicions').then(function(d){
+    COMPS=d||[];
     if(!d||!d.length){w.innerHTML='<div class="empty"><div class="ei">&#x1F3C6;</div><p>Cap competicio</p></div>';return;}
     var s=d.slice().sort(function(a,b){return new Date(a.date||0)-new Date(b.date||0);});
     w.innerHTML='<table class="tbl"><thead><tr><th>Data</th><th>Nom</th><th>Cat</th><th>Lloc</th><th>Federacio</th><th>Estat</th><th></th></tr></thead><tbody>'+s.map(function(c){
-      return '<tr><td style="font-weight:600;white-space:nowrap">'+fd(c.date)+'</td><td style="font-weight:700">'+c.name+'</td><td><span class="badge bpk">'+c.cat+'</span></td><td>'+(c.place||'&mdash;')+'</td><td>'+(c.url?'<a href="'+c.url+'" target="_blank">&#x1F517; Obrir</a>':'&mdash;')+'</td><td><span class="badge '+sb(c.status)+'">'+c.status+'</span></td><td><div style="display:flex;gap:4px"><button class="btn bs sm" onclick=\'editC('+JSON.stringify(c)+')\'>&#x270F;&#xFE0F;</button><button class="btn bd2 sm" onclick="delC(\''+c.id+'\')">&#x1F5D1;</button></div></td></tr>';
+      return '<tr><td style="font-weight:600;white-space:nowrap">'+fd(c.date)+'</td><td style="font-weight:700">'+c.name+'</td><td><span class="badge bpk">'+c.cat+'</span></td><td>'+(c.place||'&mdash;')+'</td><td>'+(c.url?'<a href="'+c.url+'" target="_blank">&#x1F517; Obrir</a>':'&mdash;')+'</td><td><span class="badge '+sb(c.status)+'">'+c.status+'</span></td><td><div style="display:flex;gap:4px">'+(c.url&&!passat(c.date)?'<button class="btn bp sm" title="Anunciar amb pop-up" onclick="anunciar(\'competicions\',\''+c.id+'\')">&#x1F4E3;</button>':'')+'<button class="btn bs sm" onclick="editC(COMPS.filter(function(x){return x.id===\''+c.id+'\';})[0])">&#x270F;&#xFE0F;</button><button class="btn bd2 sm" onclick="delC(\''+c.id+'\')">&#x1F5D1;</button></div></td></tr>';
     }).join('')+'</tbody></table>';
   });
 }
@@ -1138,8 +1163,9 @@ function delC(id){if(!confirm('Eliminar?'))return;api('delete','competicions',nu
 function loadRaces(){
   var l=document.getElementById('races-list');l.innerHTML='<div class="ld"><div class="spin"></div></div>';
   api('getAll','carreres').then(function(d){
+    RACES=d||[];
     if(!d||!d.length){l.innerHTML='<div class="empty"><div class="ei">&#x1F6A9;</div><p>Cap cursa propia</p></div>';return;}
-    l.innerHTML=d.map(function(r){return '<div class="ir"><div class="iric">&#x1F6A9;</div><div class="iri"><div class="irn">'+r.name+'</div><div class="irs">'+(r.date?fd(r.date)+' &middot; ':''+(r.edition||''))+'</div></div><div class="ira"><button class="btn bs sm" onclick=\'editRace('+JSON.stringify(r)+')\'>&#x270F;&#xFE0F;</button><button class="btn bd2 sm" onclick="delRace(\''+r.id+'\')">&#x1F5D1;</button></div></div>';}).join('');
+    l.innerHTML=d.map(function(r){return '<div class="ir"><div class="iric">&#x1F6A9;</div><div class="iri"><div class="irn">'+r.name+'</div><div class="irs">'+(r.date?fd(r.date)+' &middot; ':''+(r.edition||''))+'</div></div><div class="ira">'+(r.url&&!passat(r.date)?'<button class="btn bp sm" title="Anunciar amb pop-up" onclick="anunciar(\'carreres\',\''+r.id+'\')">&#x1F4E3; Pop-up</button>':'')+'<button class="btn bs sm" onclick="editRace(RACES.filter(function(x){return x.id===\''+r.id+'\';})[0])">&#x270F;&#xFE0F;</button><button class="btn bd2 sm" onclick="delRace(\''+r.id+'\')">&#x1F5D1;</button></div></div>';}).join('');
   });
 }
 function openRaceM(){['race-id','race-n','race-d','race-e','race-de','race-i','race-u'].forEach(function(x){document.getElementById(x).value='';});oM('mo-race');}

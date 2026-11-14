@@ -39,7 +39,8 @@ create table if not exists public.noticies (
   created_at timestamptz default now(),
   data date not null default current_date,
   titol text not null, resum text, text text, imatge text, enllac text, boto text,
-  activa boolean default true, banner boolean default false, popup boolean default false
+  activa boolean default true, banner boolean default false, popup boolean default false,
+  fins date
 );
 
 -- ---------- Inscripcions (dades privades) ----------
