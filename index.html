@@ -648,16 +648,18 @@
       <h2 style="font-family:Raleway,sans-serif;color:white;font-size:1.8rem;font-weight:900" id="banner-title-text">Els nostres patrocinadors</h2>
     </div>
     <div style="position:relative;overflow:hidden">
-      <div id="sponsor-track" style="display:flex;gap:3rem;align-items:center;animation:scroll-sponsors 20s linear infinite;width:max-content">
+      <div id="sponsor-track" style="display:flex;gap:1.5rem;padding:.8rem 0;align-items:center;animation:scroll-sponsors 20s linear infinite;width:max-content">
         <div class="sp-logo-wrap"><span style="color:rgba(255,255,255,0.3);font-size:.9rem;font-weight:600">Carregant patrocinadors...</span></div>
       </div>
     </div>
   </section>
   <style>
     @keyframes scroll-sponsors{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-    .sp-logo-wrap{display:flex;align-items:center;justify-content:center;min-width:140px;height:70px;padding:0 1.5rem;filter:brightness(0) invert(.7);transition:filter .3s}
-    .sp-logo-wrap:hover{filter:brightness(0) invert(1)}
-    .sp-logo-wrap img{max-height:55px;max-width:130px;object-fit:contain}
+    /* Logos amb els seus colors originals sobre targeta blanca (funciona amb qualsevol logo, amb o sense fons) */
+    .sp-logo-wrap{display:flex;align-items:center;justify-content:center;width:170px;height:90px;padding:.8rem 1.2rem;background:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);transition:transform .3s,box-shadow .3s;flex-shrink:0}
+    .sp-logo-wrap:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 12px 30px rgba(0,0,0,.25)}
+    .sp-logo-wrap img{max-height:62px;max-width:100%;object-fit:contain}
+    .sp-logo-wrap span{color:#1a0a12!important;text-align:center}
     #sponsor-track:hover{animation-play-state:paused}
   </style>
 
@@ -721,7 +723,8 @@
           if(!data||!data.length) return;
           var track = document.getElementById('sponsor-track');
           var items = data.map(function(s){
-            return '<div class="sp-logo-wrap">'+(s.img?'<img src="'+s.img+'" alt="'+s.name+'">':'<span style="color:rgba(255,255,255,0.5);font-weight:700;font-size:.85rem">'+s.name+'</span>')+'</div>';
+            var inner=s.img?'<img src="'+ecEsc(s.img)+'" alt="'+ecEsc(s.name)+'" title="'+ecEsc(s.name)+'">':'<span style="font-weight:700;font-size:.85rem">'+ecEsc(s.name)+'</span>';
+            return /^https?:\/\//.test(s.web||'')?'<a class="sp-logo-wrap" href="'+ecEsc(s.web)+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="sp-logo-wrap">'+inner+'</div>';
           }).join('');
           // Duplicar per efecte infinit
           track.innerHTML = items + items;
