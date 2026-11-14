@@ -17,6 +17,15 @@
 
   var TEMES = {
     rosa: { nom: 'Rosa (actual)' },
+    rosablanc: {
+      nom: 'Rosa i Blanc', desc: 'Tot en rosa i blanc, sense negre: fresc i alegre',
+      accent: ['#ff2f8e', '255,47,142'], light: ['#ffd3e7', '255,211,231'], deep: ['#d81470', '216,20,112'],
+      d1: ['#b3125f', '179,18,95'], d2: ['#c7176b', '199,23,107'], d3: ['#d92a7b', '217,42,123'], d4: ['#f0559a', '240,85,154'],
+      off: ['#fff4f9', '255,244,249'], gray: ['#9b4d74', '155,77,116'],
+      extra: [['#050505', '#9e0f53'], ['rgba(0,0,0,', 'rgba(150,10,80,']],
+      head: "'Poppins'", body: "'Nunito'",
+      fonts: 'family=Poppins:wght@600;700;800;900&family=Nunito:wght@400;600;700;800;900'
+    },
     vermell: {
       nom: 'Vermell Pista', desc: 'Negre i vermell de competició, lletra condensada esportiva',
       accent: ['#e10600', '225,6,0'], light: ['#ff4d3d', '255,77,61'], deep: ['#a30400', '163,4,0'],
@@ -60,6 +69,7 @@
       txt = txt.split(BASE[k][0]).join(T[k][0]).split(BASE[k][0].toUpperCase()).join(T[k][0]);
       txt = txt.replace(new RegExp(BASE[k][1].replace(/,/g, ',\\s*'), 'g'), T[k][1]);
     });
+    (T.extra || []).forEach(function (p) { txt = txt.split(p[0]).join(p[1]); });
     txt = txt.replace(/'Raleway'|"Raleway"|\bRaleway\b/g, T.head).replace(/'Montserrat'|"Montserrat"|\bMontserrat\b/g, T.body);
     return txt;
   }
