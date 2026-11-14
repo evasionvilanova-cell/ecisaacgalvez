@@ -202,7 +202,8 @@ html,body{height:100%;font-family:'Montserrat',sans-serif;background:#fff5fb;col
 .pimgs .first{position:absolute;bottom:2px;left:2px;font-size:.5rem;background:#fc449d;color:#fff;border-radius:6px;padding:1px 4px;font-weight:800}
 .tpre{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}.tpre button{font-size:.62rem;padding:3px 8px;border-radius:20px;border:1px solid rgba(252,68,157,.3);background:#fff;cursor:pointer;color:#6b3a55;font-weight:700}
 .com{background:#fff;border:1px solid rgba(252,68,157,.15);border-radius:14px;padding:1rem 1.2rem;margin-bottom:.8rem}
-.com.st-Nova{border-left:4px solid #fc449d}
+.com.st-Nova,.com.st-Pagada{border-left:4px solid #fc449d}
+.com.st-Pendent.de.pagament,.com.st-Pagament.fallit{opacity:.55}
 .com-h{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.8rem;align-items:flex-start}
 .com ul{margin:.6rem 0 .6rem 1.1rem;font-size:.82rem;line-height:1.6}
 .temes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem}
@@ -825,18 +826,18 @@ function saveProd(){
 function delProd(){var id=document.getElementById('pm-id').value;if(!id||!confirm('Esborrar aquest producte?'))return;ECDB.remove('productes',id).then(function(){cM('mo-prod');toast('Esborrat');loadProds();});}
 
 // ---------- BOTIGA: COMANDES ----------
-var COMS=[],CEST=['Nova','Confirmada','Pagada','Preparada','Lliurada','Cancel·lada'];
+var COMS=[],CEST=['Nova','Pagada','Confirmada','Preparada','Lliurada','Pendent de pagament','Pagament fallit','Revisar pagament','Cancel·lada'];
 function loadCom(){
   return ECDB.getAll('comandes').then(function(d){
     COMS=d.slice().reverse();
-    var n=COMS.filter(function(c){return c.estat==='Nova';}).length;document.getElementById('nav-com').textContent=n||'';
+    var n=COMS.filter(function(c){return c.estat==='Nova'||c.estat==='Pagada'||c.estat==='Revisar pagament';}).length;document.getElementById('nav-com').textContent=n||'';
     var sel=document.getElementById('com-f');if(sel.options.length<2)CEST.forEach(function(e){var o=document.createElement('option');o.textContent=e;sel.appendChild(o);});
     if(document.getElementById('p-comandes').classList.contains('on'))renderCom();
   }).catch(function(e){console.error(e);});
 }
 function renderCom(){
   var f=document.getElementById('com-f').value,l=COMS.filter(function(c){return !f||c.estat===f;});
-  var act=COMS.filter(function(c){return c.estat!=='Cancel·lada';});
+  var act=COMS.filter(function(c){return['Cancel·lada','Pendent de pagament','Pagament fallit'].indexOf(c.estat)<0;});
   document.getElementById('com-stats').innerHTML='<div class="sc"><div><div class="sn">'+COMS.filter(function(c){return c.estat==='Nova';}).length+'</div><div class="sl">Noves</div></div></div>'
     +'<div class="sc"><div><div class="sn">'+act.length+'</div><div class="sl">Comandes actives</div></div></div>'
     +'<div class="sc"><div><div class="sn">'+eur(act.reduce(function(a,c){return a+(+c.total||0);},0))+'</div><div class="sl">Import total</div></div></div>'
@@ -845,13 +846,13 @@ function renderCom(){
   if(!l.length){w.innerHTML='<div class="card"><div class="cb"><div class="empty"><div class="ei">&#x1F6D2;</div><p>'+(COMS.length?'Cap comanda amb aquest filtre':'Encara no hi ha comandes')+'</p></div></div></div>';return;}
   w.innerHTML=l.map(function(c){
     var it=Array.isArray(c.items)?c.items:[];
-    return '<div class="com st-'+ecEsc(c.estat)+'"><div class="com-h"><div><b>'+ecEsc(c.nom)+'</b>'+(c.corredor?' &middot; corredor/a: '+ecEsc(c.corredor):'')+'<br><a href="tel:'+ecEsc(c.telefon)+'">'+ecEsc(c.telefon)+'</a> &middot; <a href="mailto:'+ecEsc(c.email)+'">'+ecEsc(c.email)+'</a><br><span style="color:#6b3a55">'+new Date(c.created_at).toLocaleString('ca-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' &middot; Pagament: '+ecEsc(c.pagament)+' &middot; Ref. '+String(c.id).slice(0,6).toUpperCase()+'</span></div>'
+    return '<div class="com st-'+ecEsc(c.estat)+'"><div class="com-h"><div><b>'+ecEsc(c.nom)+'</b>'+(c.corredor?' &middot; corredor/a: '+ecEsc(c.corredor):'')+'<br><a href="tel:'+ecEsc(c.telefon)+'">'+ecEsc(c.telefon)+'</a> &middot; <a href="mailto:'+ecEsc(c.email)+'">'+ecEsc(c.email)+'</a><br><span style="color:#6b3a55">'+new Date(c.created_at).toLocaleString('ca-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' &middot; Pagament: '+ecEsc(c.pagament)+' &middot; Ref. '+ecEsc(c.ref||String(c.id).slice(0,6).toUpperCase())+(c.redsys_order?' &middot; Redsys '+ecEsc(c.redsys_order):'')+'</span></div>'
       +'<div style="text-align:right"><div style="font-size:1.3rem;font-weight:900">'+eur(c.total)+'</div>'
       +'<select class="ins-sel" style="background:#fff5fb" onchange="setCom(\''+c.id+'\',{estat:this.value})">'+CEST.map(function(e){return '<option'+(e===c.estat?' selected':'')+'>'+e+'</option>';}).join('')+'</select>'
       +'<label class="chk" style="justify-content:flex-end"><input type="checkbox" '+(c.pagada?'checked':'')+' onchange="setCom(\''+c.id+'\',{pagada:this.checked})"> Pagada</label></div></div>'
       +'<ul>'+it.map(function(i){return '<li>'+i.q+' &times; <b>'+ecEsc(i.nom)+'</b>'+(i.talla?' (talla '+ecEsc(i.talla)+')':'')+' &mdash; '+eur(i.preu*i.q)+'</li>';}).join('')+'</ul>'
       +(c.notes?'<div style="font-size:.8rem;color:#6b3a55;margin-bottom:.5rem">&#x1F4AC; '+ecEsc(c.notes)+'</div>':'')
-      +'<div style="display:flex;gap:6px;flex-wrap:wrap"><a class="btn bp sm" href="mailto:'+ecEsc(c.email)+'?subject='+encodeURIComponent('Comanda '+String(c.id).slice(0,6).toUpperCase()+' - Escola de Ciclisme Isaac Gálvez')+'">&#x2709; Escriure</a>'
+      +'<div style="display:flex;gap:6px;flex-wrap:wrap"><a class="btn bp sm" href="mailto:'+ecEsc(c.email)+'?subject='+encodeURIComponent('Comanda '+(c.ref||String(c.id).slice(0,6).toUpperCase())+' - Escola de Ciclisme Isaac Gálvez')+'">&#x2709; Escriure</a>'
       +'<button class="btn bs sm" onclick="noteCom(\''+c.id+'\')">&#x1F4DD; Nota interna'+(c.notes_admin?' ('+ecEsc(c.notes_admin.slice(0,30))+')':'')+'</button>'
       +'<button class="btn bd2 sm" onclick="delCom(\''+c.id+'\')">&#x1F5D1;</button></div></div>';
   }).join('');
@@ -862,7 +863,7 @@ function delCom(id){if(!confirm('Esborrar aquesta comanda?'))return;ECDB.remove(
 function exportCom(){
   var cell=function(v){return'"'+String(v==null?'':v).replace(/"/g,'""')+'"';};
   var rows=[['Ref','Data','Estat','Pagada','Client','Telèfon','Correu','Corredor/a','Pagament','Producte','Talla','Quantitat','Preu','Subtotal','Total comanda','Comentaris']];
-  COMS.forEach(function(c){(c.items||[]).forEach(function(i){rows.push([String(c.id).slice(0,6).toUpperCase(),String(c.created_at).slice(0,10),c.estat,c.pagada?'Sí':'No',c.nom,c.telefon,c.email,c.corredor,c.pagament,i.nom,i.talla,i.q,i.preu,i.preu*i.q,c.total,c.notes]);});});
+  COMS.forEach(function(c){(c.items||[]).forEach(function(i){rows.push([c.ref||String(c.id).slice(0,6).toUpperCase(),String(c.created_at).slice(0,10),c.estat,c.pagada?'Sí':'No',c.nom,c.telefon,c.email,c.corredor,c.pagament,i.nom,i.talla,i.q,i.preu,i.preu*i.q,c.total,c.notes]);});});
   var csv='﻿'+rows.map(function(r){return r.map(cell).join(';');}).join('\n');
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='comandes-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }

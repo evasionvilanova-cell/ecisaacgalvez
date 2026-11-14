@@ -139,7 +139,11 @@ create table if not exists public.comandes (
   items jsonb not null,
   total numeric(9,2),
   pagada boolean default false,
-  notes_admin text
+  notes_admin text,
+  ref text unique,
+  redsys_order text unique,
+  redsys_code int,
+  pagat_at timestamptz
 );
 
 alter table public.productes enable row level security;

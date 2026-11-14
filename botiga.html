@@ -125,6 +125,7 @@ footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90de
 .bt-chk{display:flex;gap:.5rem;align-items:flex-start;font-size:.78rem;color:var(--gr);line-height:1.45;cursor:pointer}
 .bt-chk input{margin-top:.15rem;accent-color:var(--pk)}
 .bad{border-color:#dc2626!important;color:#dc2626}
+.bt-pm{display:flex;gap:.6rem}.bt-pm label{flex:1;display:flex!important;gap:.5rem;align-items:center;border:1.5px solid rgba(252,68,157,.25);border-radius:12px;padding:.75rem .9rem;font-size:.85rem!important;letter-spacing:0!important;text-transform:none!important;color:var(--dk)!important;cursor:pointer}.bt-pm input{width:auto!important;accent-color:var(--pk)}
 .bt-note{font-size:.75rem;color:var(--gr);text-align:center;margin-top:.7rem}
 .bt-ok{text-align:center;padding-top:2rem}.bt-ok p{color:var(--gr);line-height:1.7;margin:.6rem 0}
 .bt-pay{background:var(--off);border-radius:14px;padding:1rem;text-align:left;margin-top:1rem}.bt-pay p{white-space:pre-line;margin:.3rem 0 0}
@@ -184,7 +185,7 @@ footer{background:#050505;border-top:3px solid;border-image:linear-gradient(90de
 </div>
 
 <script>
-var PRODS=[],CAT='Tots',CART=[],PAG='';
+var PRODS=[],CAT='Tots',CART=[],PAG='',ONLINE=null;
 try{CART=JSON.parse(localStorage.getItem('ec_cart')||'[]');}catch(e){CART=[];}
 function eur(n){return Number(n||0).toLocaleString('ca-ES',{style:'currency',currency:'EUR'});}
 function imgs(p){return String(p.imatges||'').split('\n').map(function(s){return s.trim();}).filter(Boolean);}
@@ -197,6 +198,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMo('bt
 window.onload=function(){
   saveCart();
   ECDB.getConfig().then(function(c){PAG=c.botiga_pagament||'';}).catch(function(){});
+  // Pagament online (Redsys) disponible? Només funciona quan la web està a Vercel amb les claus posades.
+  fetch('/api/botiga-config').then(function(r){return r.ok?r.json():null;}).then(function(j){ONLINE=j&&j.online?j:null;}).catch(function(){ONLINE=null;});
+  checkReturn();
   ECDB.getProductes().then(function(d){
     PRODS=d;
     var cats=['Tots'].concat(d.map(function(p){return p.categoria;}).filter(function(c,i,a){return c&&a.indexOf(c)===i;}));
@@ -257,11 +261,12 @@ function renderCart(){
   +'<div class="bt-f"><label>Nom i cognoms *</label><input name="nom" required></div>'
   +'<div class="bt-f2"><div class="bt-f"><label>Telèfon *</label><input name="telefon" type="tel" required></div><div class="bt-f"><label>Correu *</label><input name="email" type="email" required></div></div>'
   +'<div class="bt-f"><label>Nom del corredor/a (si és per a un alumne)</label><input name="corredor"></div>'
-  +'<div class="bt-f"><label>Forma de pagament</label><select name="pagament"><option>Bizum</option><option>Transferència</option><option>En efectiu en recollir-ho</option></select></div>'
+  +(ONLINE?'<div class="bt-f"><label>Forma de pagament</label><div class="bt-pm"><label><input type="radio" name="method" value="card" checked> &#x1F4B3; Targeta</label>'+(ONLINE.bizum?'<label><input type="radio" name="method" value="bizum"> &#x1F4F1; Bizum</label>':'')+'</div></div>'
+    :'<div class="bt-f"><label>Forma de pagament</label><select name="pagament"><option>Bizum</option><option>Transferència</option><option>En efectiu en recollir-ho</option></select></div>')
   +'<div class="bt-f"><label>Comentaris</label><textarea name="notes" rows="2"></textarea></div>'
   +'<label class="bt-chk"><input type="checkbox" name="ok" required> Accepto que el club faci servir aquestes dades per gestionar la comanda. *</label>'
-  +'<p class="bt-err" id="bt-cerr"></p><button class="bt-btn" id="bt-send" type="submit">Fer la comanda · '+eur(total())+'</button>'
-  +'<p class="bt-note">No es cobra res ara. Et confirmarem la comanda i com pagar-la.</p></form>';
+  +'<p class="bt-err" id="bt-cerr"></p><button class="bt-btn" id="bt-send" type="submit">'+(ONLINE?'Pagar ':'Fer la comanda · ')+eur(total())+'</button>'
+  +(ONLINE?'<p class="bt-note">&#x1F512; Pagament segur amb Redsys'+(ONLINE.test?' (MODE PROVES: no es cobra res)':'')+'</p>':'<p class="bt-note">No es cobra res ara. Et confirmarem la comanda i com pagar-la.</p>')+'</form>';
   document.getElementById('bt-form').onsubmit=sendOrder;
 }
 function lineQ(i,d){CART[i].q+=d;if(CART[i].q<1)CART.splice(i,1);saveCart();renderCart();}
@@ -272,6 +277,7 @@ function sendOrder(e){
   var bad=Array.prototype.filter.call(f.querySelectorAll('[required]'),function(el){return el.type==='checkbox'?!el.checked:!el.value.trim();});
   if(f.email.value&&!/^\S+@\S+\.\S+$/.test(f.email.value))bad.push(f.email);
   if(bad.length){bad.forEach(function(x){(x.type==='checkbox'?x.parentNode:x).classList.add('bad');});err.textContent='Revisa els camps obligatoris (*).';return;}
+  if(ONLINE)return payOnline(f,err,btn);
   var o={nom:f.nom.value.trim(),telefon:f.telefon.value.trim(),email:f.email.value.trim(),corredor:f.corredor.value.trim(),pagament:f.pagament.value,notes:f.notes.value.trim(),
     items:CART.map(function(c){return{id:c.id,nom:c.nom,talla:c.talla,preu:c.preu,q:c.q};}),total:Math.round(total()*100)/100,estat:'Nova'};
   btn.disabled=true;btn.textContent='Enviant...';err.textContent='';
@@ -280,6 +286,43 @@ function sendOrder(e){
     document.getElementById('bt-cart-c').innerHTML='<div class="bt-ok"><div style="font-size:3rem">&#x1F389;</div><h2>Comanda enviada!</h2><p>Gràcies, '+ecEsc(o.nom)+'. Hem rebut la teva comanda de <b>'+eur(o.total)+'</b>. Et contactarem a '+ecEsc(o.email)+' per confirmar-la.</p>'
       +(PAG?'<div class="bt-pay"><b>Com pagar</b><p>'+ecEsc(PAG)+'</p></div>':'')+'<button class="bt-btn" onclick="closeMo(\'bt-cart\')">Tancar</button></div>';
   }).catch(function(ex){console.error(ex);err.textContent="No s'ha pogut enviar. Torna-ho a provar o contacta'ns.";btn.disabled=false;btn.textContent='Fer la comanda';});
+}
+
+// ---------- Pagament online amb Redsys ----------
+function payOnline(f,err,btn){
+  var m=(f.querySelector('[name=method]:checked')||{}).value||'card';
+  var body={method:m,customer:{nom:f.nom.value.trim(),telefon:f.telefon.value.trim(),email:f.email.value.trim(),corredor:f.corredor.value.trim(),notes:f.notes.value.trim()},
+    items:CART.map(function(c){return{id:c.id,talla:c.talla,q:c.q};})};
+  btn.disabled=true;btn.textContent='Connectant amb el banc...';err.textContent='';
+  fetch('/api/botiga-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});})
+    .then(function(x){
+      if(!x.ok||!x.j.redsys)throw new Error(x.j.error||'Error');
+      localStorage.setItem('ec_last_order',JSON.stringify({ref:x.j.ref,total:x.j.total}));
+      var fm=document.createElement('form');fm.method='POST';fm.action=x.j.redsys.url;
+      Object.keys(x.j.redsys.fields).forEach(function(k){var i=document.createElement('input');i.type='hidden';i.name=k;i.value=x.j.redsys.fields[k];fm.appendChild(i);});
+      document.body.appendChild(fm);fm.submit();
+    })
+    .catch(function(e){err.textContent=e.message||"No s'ha pogut iniciar el pagament.";btn.disabled=false;btn.textContent='Pagar '+eur(total());});
+}
+// Tornada des de Redsys: botiga.html?comanda=REF&t=...&pagament=ok|ko
+function checkReturn(){
+  var q=new URLSearchParams(location.search),ref=q.get('comanda');if(!ref)return;
+  var ko=q.get('pagament')==='ko',c=document.getElementById('bt-cart-c');
+  history.replaceState(null,'',location.pathname);
+  openMo('bt-cart');
+  if(ko){c.innerHTML='<div class="bt-ok"><div style="font-size:3rem">&#x26A0;&#xFE0F;</div><h2>Pagament no completat</h2><p>No s\'ha fet cap cobrament. La cistella continua guardada: pots tornar-ho a provar.</p><button class="bt-btn" onclick="renderCart()">Tornar a la cistella</button></div>';return;}
+  c.innerHTML='<div class="bt-ok"><div class="ld"><div class="spin"></div> Comprovant el pagament...</div></div>';
+  var tries=0;
+  (function poll(){
+    fetch('/api/botiga-estat?comanda='+encodeURIComponent(ref)+'&t='+encodeURIComponent(q.get('t')||'')).then(function(r){return r.ok?r.json():null;}).then(function(s){
+      if(s&&s.pagada){
+        CART=[];saveCart();
+        c.innerHTML='<div class="bt-ok"><div style="font-size:3rem">&#x1F389;</div><h2>Pagament rebut!</h2><p>Comanda <b>'+ecEsc(s.ref)+'</b> &middot; '+eur(s.total)+'. T\'avisarem quan estigui a punt per recollir.</p>'+(PAG?'<div class="bt-pay"><b>Recollida</b><p>'+ecEsc(PAG)+'</p></div>':'')+'<button class="bt-btn" onclick="closeMo(\'bt-cart\')">Tancar</button></div>';
+      }else if(++tries<8){setTimeout(poll,2000);}
+      else{c.innerHTML='<div class="bt-ok"><div style="font-size:3rem">&#x23F3;</div><h2>Comanda '+ecEsc(ref)+'</h2><p>Encara no hem rebut la confirmació del banc. Si el pagament s\'ha fet, t\'arribarà igualment i et contactarem. Si tens dubtes, escriu-nos indicant el número de comanda.</p><button class="bt-btn" onclick="closeMo(\'bt-cart\')">Tancar</button></div>';}
+    }).catch(function(){if(++tries<8)setTimeout(poll,2000);});
+  })();
 }
 </script>
 </body>
