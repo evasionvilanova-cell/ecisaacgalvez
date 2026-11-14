@@ -434,6 +434,18 @@
     .mobile-menu a:hover { color: #ff7ec3; }
     @media(min-width:901px) { .mobile-menu { display: none !important; } }
 
+    /* Formulari d'inscripció plegable (només mòbil) */
+    .fc-intro { display: none; text-align: center; padding: .6rem 0; }
+    .fc-intro-ic { font-size: 2.4rem; }
+    .fc-intro h3 { color: #fff; font-size: 1.4rem; margin: .4rem 0 .3rem; }
+    .fc-intro p { color: rgba(255,255,255,.6); font-size: .9rem; margin-bottom: 1.2rem; }
+    .fc-open { width: 100%; }
+    @media (max-width: 900px) {
+      .form-card.fc-closed .fc-intro { display: block; }
+      .form-card.fc-closed #ins-form { display: none; }
+      #ins-form { animation: fcIn .35s ease; }
+    }
+    @keyframes fcIn { from { opacity: 0; transform: translateY(-8px); } }
     /* Formulari d'inscripció */
     .fc-step { color: var(--pink-light); font-weight: 800; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; margin: .4rem 0 .9rem; }
     .fc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; margin-bottom: .6rem; }
@@ -581,7 +593,14 @@
         <h2>Uneix-te a la nostra escola</h2>
         <p>Omple el formulari i ens posarem en contacte amb tu per explicar-te tots els detalls, horaris i preus. No cal experiència prèvia!</p>
       </div>
-      <div class="form-card reveal">
+      <div class="form-card reveal fc-closed" id="form-card">
+        <!-- Al mòbil el formulari surt plegat: s'obre amb aquest botó -->
+        <div class="fc-intro">
+          <div class="fc-intro-ic">&#x1F4DD;</div>
+          <h3>Formulari d'inscripció</h3>
+          <p>Només et portarà un parell de minuts.</p>
+          <button type="button" class="btn btn-form fc-open" onclick="obreFormulari()">Omplir la inscripció &darr;</button>
+        </div>
         <form id="ins-form" novalidate>
           <div class="fc-step">1 · Corredor/a</div>
           <div class="fc-grid">
@@ -692,6 +711,12 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => obs.observe(el));
 
+    function obreFormulari() {
+      var c = document.getElementById('form-card');
+      c.classList.remove('fc-closed');
+      var first = c.querySelector('#ins-form input');
+      setTimeout(function () { c.scrollIntoView({ behavior: 'smooth', block: 'start' }); if (first) first.focus({ preventScroll: true }); }, 50);
+    }
     // Inscripció real: es desa a la base de dades (taula inscripcions)
     document.getElementById('ins-form').addEventListener('submit', function (e) {
       e.preventDefault();
