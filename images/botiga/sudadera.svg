@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#fff"/>
+<path d="M150 80 Q200 30 250 80 L320 110 L350 300 L310 305 L285 180 L285 345 L115 345 L115 180 L90 305 L50 300 L80 110 Z" fill="#1a0a12"/>
+<path d="M160 82 Q200 50 240 82 Q235 130 200 140 Q165 130 160 82 Z" fill="#2b1420"/>
+<rect x="115" y="320" width="170" height="25" fill="#fc449d"/><rect x="50" y="288" width="40" height="17" fill="#fc449d"/><rect x="310" y="288" width="40" height="17" fill="#fc449d"/>
+<circle cx="200" cy="215" r="34" fill="#fc449d"/><text x="200" y="224" font-family="Arial Black,Arial" font-weight="900" font-size="24" fill="#fff" text-anchor="middle">IG</text>
+<path d="M188 140 L186 175 M212 140 L214 175" stroke="#fc449d" stroke-width="3"/></svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#fff"/>
+<path d="M160 70 Q200 30 240 70" fill="none" stroke="#1a0a12" stroke-width="14"/>
+<rect x="110" y="70" width="180" height="270" rx="45" fill="#fc449d"/>
+<rect x="135" y="215" width="130" height="95" rx="22" fill="#c4207a"/><path d="M150 240 L250 240" stroke="#ffe14d" stroke-width="5"/>
+<rect x="110" y="120" width="180" height="22" fill="#1a0a12"/><circle cx="200" cy="175" r="18" fill="#fff"/><text x="200" y="182" font-family="Arial Black,Arial" font-weight="900" font-size="15" fill="#fc449d" text-anchor="middle">IG</text></svg>

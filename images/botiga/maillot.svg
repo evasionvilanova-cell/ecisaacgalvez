@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#fff"/>
+<path d="M140 70 L170 60 Q200 80 230 60 L260 70 L330 120 L305 175 L275 160 L275 340 Q200 352 125 340 L125 160 L95 175 L70 120 Z" fill="#fc449d" stroke="#c4207a" stroke-width="3"/>
+<path d="M170 60 Q200 95 230 60" fill="none" stroke="#1a0a12" stroke-width="8"/>
+<rect x="125" y="215" width="150" height="34" fill="#1a0a12"/><text x="200" y="239" font-family="Arial Black,Arial" font-weight="900" font-size="20" fill="#fff" text-anchor="middle">ISAAC GÁLVEZ</text>
+<path d="M70 120 L95 175 L105 170 L82 116 Z" fill="#1a0a12"/><path d="M330 120 L305 175 L295 170 L318 116 Z" fill="#1a0a12"/>
+<path d="M125 300 L275 280 L275 292 L125 312 Z" fill="#ffe14d"/><circle cx="240" cy="120" r="12" fill="#fff" stroke="#1a0a12" stroke-width="3"/></svg>
